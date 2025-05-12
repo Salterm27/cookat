@@ -24,16 +24,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.navigation.NavController
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
 	val drawerState = rememberDrawerState(DrawerValue.Closed)
 	val scope = rememberCoroutineScope()
 	ModalNavigationDrawer(
 		drawerState = drawerState,
-		drawerContent = { DrawerContent() }
+		drawerContent = { DrawerContent(navController) }
 	) {
 		Scaffold(
 			topBar = {

@@ -6,16 +6,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.Arrangement
-
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.navigation.NavController
 
 @Composable
-fun DrawerContent() {
+fun DrawerContent(navController: NavController) {
 	Surface(
 		color = MaterialTheme.colorScheme.surfaceVariant,
 		tonalElevation = 4.dp,
@@ -30,12 +29,11 @@ fun DrawerContent() {
 			modifier = Modifier.padding(16.dp),
 			verticalArrangement = Arrangement.spacedBy(12.dp)
 		) {
-			Text("Profile", style = MaterialTheme.typography.bodyLarge)
-			Text("Recipes", style = MaterialTheme.typography.bodyLarge)
-			Text("New Recipe", style = MaterialTheme.typography.bodyLarge)
-			Text("Drafts", style = MaterialTheme.typography.bodyLarge)
-			Text("Help", style = MaterialTheme.typography.bodyLarge)
-			Text("About", style = MaterialTheme.typography.bodyLarge)
+			DrawerItem("Profile") { navController.navigate("profile") }
+			DrawerItem("Recipes")
+			DrawerItem("New Recipe") { navController.navigate("newRecipe") }
+			DrawerItem("Drafts")
+			DrawerItem("Settings") { navController.navigate("settings") }
 		}
 	}
 }

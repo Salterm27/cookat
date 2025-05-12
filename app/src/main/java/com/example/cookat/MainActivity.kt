@@ -12,6 +12,11 @@ import com.example.cookat.screens.auth.RegisterScreen
 import com.example.cookat.screens.home.HomeScreen
 import com.example.cookat.screens.auth.PasswordScreen
 import com.example.cookat.screens.auth.ValidatePasswordScreen
+import com.example.cookat.screens.profile.MyProfile
+import com.example.cookat.screens.settings.MySettings
+import com.example.cookat.screens.recipes.NewRecipe
+
+
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +47,7 @@ fun AppNavigation() {
 		}
 
 		composable("auth") {
-			HomeScreen()
+			HomeScreen(navController)
 		}
 		composable("password") {
 			PasswordScreen(onNavigateTo = { navController.navigate("validatePassword") })
@@ -51,6 +56,19 @@ fun AppNavigation() {
 			ValidatePasswordScreen(onNavigateTo = { navController.navigate("login") })
 		}
 
-	}
+		composable("profile") {
+			MyProfile(onNavigateTo = {navController.navigate("auth") } )
+		}
+
+		composable ("newRecipe") {
+			NewRecipe(onNavigateTo = { navController.navigate("auth") })
+		}
+
+		composable("settings") {
+			MySettings(onNavigateTo = { navController.navigate("auth") })
+		}
+
+
+		}
 }
 
