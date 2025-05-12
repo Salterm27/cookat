@@ -12,6 +12,7 @@ navigation = "2.7.0"
 lifecycle = "2.6.2"
 fragment = "1.8.6"
 navigationFragment = "2.9.0"
+material3New = "1.2.1"
 
 
 [libraries]
@@ -33,7 +34,7 @@ navigation = { group = "androidx.navigation", name = "navigation-compose", versi
 lifecycle = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
 androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
-composeMaterial3 = { group = "androidx.compose.material3", name = "material3" }
+composeMaterial3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3New" }
 composeUi = { group = "androidx.compose.ui", name = "ui" }
 composeUiToolingPreview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 

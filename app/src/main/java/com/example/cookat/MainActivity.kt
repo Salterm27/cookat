@@ -6,10 +6,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.*
-import com.example.cookat.screens.LogInScreen
+import com.example.cookat.screens.auth.LogInScreen
 import com.example.cookat.ui.theme.CookatTheme
-import com.example.cookat.screens.RegisterScreen
-import com.example.cookat.screens.AuthScreen
+import com.example.cookat.screens.auth.RegisterScreen
+import com.example.cookat.screens.home.HomeScreen
+import com.example.cookat.screens.auth.PasswordScreen
+import com.example.cookat.screens.auth.ValidatePasswordScreen
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,14 +34,21 @@ fun AppNavigation() {
 	NavHost(navController = navController, startDestination = "login") {
 		composable("login") {
 			LogInScreen(onNavigateToRegister = { navController.navigate("register")},
-				onNavigateToAuth = { navController.navigate("auth") })
+				onNavigateToAuth = { navController.navigate("auth") },
+				onNavigateToPassword = { navController.navigate("password") })
 		}
 		composable("register") {
 			RegisterScreen(onNavigateTo = { navController.navigate("login") })
 		}
 
 		composable("auth") {
-			AuthScreen(onNavigateTo = { navController.navigate("login") })
+			HomeScreen()
+		}
+		composable("password") {
+			PasswordScreen(onNavigateTo = { navController.navigate("validatePassword") })
+		}
+		composable("validatePassword") {
+			ValidatePasswordScreen(onNavigateTo = { navController.navigate("login") })
 		}
 
 	}
