@@ -5,17 +5,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
-import androidx.navigation.compose.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.cookat.screens.auth.LogInScreen
-import com.example.cookat.ui.theme.CookatTheme
-import com.example.cookat.screens.auth.RegisterScreen
-import com.example.cookat.screens.home.HomeScreen
 import com.example.cookat.screens.auth.PasswordScreen
+import com.example.cookat.screens.auth.RegisterScreen
 import com.example.cookat.screens.auth.ValidatePasswordScreen
+import com.example.cookat.screens.home.HomeScreen
 import com.example.cookat.screens.profile.MyProfile
-import com.example.cookat.screens.settings.MySettings
 import com.example.cookat.screens.recipes.NewRecipe
-
+import com.example.cookat.screens.settings.MySettings
+import com.example.cookat.ui.theme.CookatTheme
 
 
 class MainActivity : ComponentActivity() {
@@ -38,14 +39,14 @@ fun AppNavigation() {
 
 	NavHost(navController = navController, startDestination = "login") {
 		composable("login") {
-			LogInScreen(onNavigateToRegister = { navController.navigate("register")},
-				onNavigateToAuth = { navController.navigate("auth") },
+			LogInScreen(
+				onNavigateToRegister = { navController.navigate("register") },
+				onLoginSuccess = { navController.navigate("auth") },
 				onNavigateToPassword = { navController.navigate("password") })
 		}
 		composable("register") {
 			RegisterScreen(onNavigateTo = { navController.navigate("login") })
 		}
-
 		composable("auth") {
 			HomeScreen(navController)
 		}
@@ -57,10 +58,10 @@ fun AppNavigation() {
 		}
 
 		composable("profile") {
-			MyProfile(onNavigateTo = {navController.navigate("auth") } )
+			MyProfile(onNavigateTo = { navController.navigate("auth") })
 		}
 
-		composable ("newRecipe") {
+		composable("newRecipe") {
 			NewRecipe(onNavigateTo = { navController.navigate("auth") })
 		}
 
@@ -69,6 +70,6 @@ fun AppNavigation() {
 		}
 
 
-		}
+	}
 }
 
