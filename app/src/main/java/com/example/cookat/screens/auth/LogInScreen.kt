@@ -19,6 +19,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -41,7 +42,6 @@ fun LogInScreen(
 	val state = viewModel.uiState
 	val focusManager = LocalFocusManager.current
 
-	// Focus requesters
 	val emailFocusRequester = remember { FocusRequester() }
 	val passwordFocusRequester = remember { FocusRequester() }
 
@@ -50,10 +50,10 @@ fun LogInScreen(
 			modifier = Modifier
 				.fillMaxSize()
 				.padding(padding)
-				.padding(16.dp),
+				.padding(horizontal = 24.dp),
 			verticalArrangement = Arrangement.Center
 		) {
-			// Email input
+			
 			TextField(
 				value = state.email,
 				onValueChange = viewModel::onEmailChange,
@@ -70,13 +70,12 @@ fun LogInScreen(
 				)
 			)
 
-			Spacer(modifier = Modifier.height(8.dp))
+			Spacer(modifier = Modifier.height(12.dp))
 
-			// Password input
 			TextField(
 				value = state.password,
 				onValueChange = viewModel::onPasswordChange,
-				label = { Text("Password") },
+				label = { Text("contraseña") },
 				visualTransformation = PasswordVisualTransformation(),
 				modifier = Modifier
 					.fillMaxWidth()
@@ -93,37 +92,52 @@ fun LogInScreen(
 				)
 			)
 
-			Spacer(modifier = Modifier.height(16.dp))
+			Spacer(modifier = Modifier.height(8.dp))
+
+			Text(
+				text = "Olvidaste la contraseña?",
+				color = MaterialTheme.colorScheme.primary,
+				style = MaterialTheme.typography.bodySmall,
+				modifier = Modifier
+					.align(Alignment.End)
+					.clickable(onClick = onNavigateToPassword)
+					.padding(4.dp)
+			)
+
+			Spacer(modifier = Modifier.height(24.dp))
 
 			if (state.isLoading) {
-				CircularProgressIndicator()
+				CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
 			} else {
-				Spacer(modifier = Modifier.height(8.dp))
-
-				TextButton(
-					onClick = onNavigateToRegister,
-					modifier = Modifier.fillMaxWidth()
-				) {
-					Text("Don’t have an account? Register")
-				}
-
-				Text(
-					text = "Forgot password?",
-					color = MaterialTheme.colorScheme.primary,
-					modifier = Modifier
-						.clickable(onClick = onNavigateToPassword)
-						.padding(top = 8.dp)
-				)
 				Button(
 					onClick = { viewModel.login(onLoginSuccess) },
-					modifier = Modifier.fillMaxWidth()
+					modifier = Modifier
+						.fillMaxWidth()
+						.height(48.dp)
 				) {
-					Text("Log In")
+					Text("Entrar a la app")
 				}
 
 				state.errorMessage?.let {
 					Spacer(modifier = Modifier.height(8.dp))
-					Text(text = it, color = Error)
+					Text(
+						text = it,
+						color = Error,
+						style = MaterialTheme.typography.bodySmall
+					)
+				}
+
+				Spacer(modifier = Modifier.height(16.dp))
+
+
+
+				Spacer(modifier = Modifier.height(12.dp))
+
+				TextButton(
+					onClick = onNavigateToRegister,
+					modifier = Modifier.align(Alignment.CenterHorizontally)
+				) {
+					Text("No tenes una cuenta? Registrate!")
 				}
 			}
 		}
