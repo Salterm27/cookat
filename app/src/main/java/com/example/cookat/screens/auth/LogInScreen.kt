@@ -1,5 +1,6 @@
 package com.example.cookat.screens.auth
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,8 +12,10 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -95,6 +98,22 @@ fun LogInScreen(
 			if (state.isLoading) {
 				CircularProgressIndicator()
 			} else {
+				Spacer(modifier = Modifier.height(8.dp))
+
+				TextButton(
+					onClick = onNavigateToRegister,
+					modifier = Modifier.fillMaxWidth()
+				) {
+					Text("Don’t have an account? Register")
+				}
+
+				Text(
+					text = "Forgot password?",
+					color = MaterialTheme.colorScheme.primary,
+					modifier = Modifier
+						.clickable(onClick = onNavigateToPassword)
+						.padding(top = 8.dp)
+				)
 				Button(
 					onClick = { viewModel.login(onLoginSuccess) },
 					modifier = Modifier.fillMaxWidth()
@@ -105,22 +124,6 @@ fun LogInScreen(
 				state.errorMessage?.let {
 					Spacer(modifier = Modifier.height(8.dp))
 					Text(text = it, color = Error)
-				}
-
-				Spacer(modifier = Modifier.height(16.dp))
-
-				Button(
-					onClick = onNavigateToRegister,
-					modifier = Modifier.fillMaxWidth()
-				) {
-					Text("Register")
-				}
-
-				Button(
-					onClick = onNavigateToPassword,
-					modifier = Modifier.fillMaxWidth()
-				) {
-					Text("Forgot password?")
 				}
 			}
 		}
