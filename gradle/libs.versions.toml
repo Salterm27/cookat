@@ -1,19 +1,20 @@
 [versions]
 agp = "8.11.0"
-kotlin = "2.0.21"
+kotlin = "2.2.0"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-lifecycleRuntimeKtx = "2.9.0"
+lifecycleRuntimeKtx = "2.9.1"
 activityCompose = "1.10.1"
-composeBom = "2025.05.00"
+composeBom = "2025.06.01"
 navigation = "2.9.0"
-lifecycle = "2.9.0"
-fragment = "1.8.6"
+lifecycle = "2.9.1"
+fragment = "1.8.8"
 navigationFragment = "2.9.0"
 material3New = "1.3.2"
-
+supabase = "3.2.0"
+ktor = "3.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -37,6 +38,11 @@ androidx-navigation-fragment = { group = "androidx.navigation", name = "navigati
 composeMaterial3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3New" }
 composeUi = { group = "androidx.compose.ui", name = "ui" }
 composeUiToolingPreview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+supabase-bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "supabase" }
+supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supabase" }
+supabase-auth = { module = "io.github.jan-tennert.supabase:auth-kt", version.ref = "supabase" }
+supabase-storage = { module = "io.github.jan-tennert.supabase:storage-kt", version.ref = "supabase" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
