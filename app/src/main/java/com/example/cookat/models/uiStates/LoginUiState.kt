@@ -1,4 +1,4 @@
-package com.example.cookat.models.auth
+package com.example.cookat.models.uiStates
 
 data class LoginUiState(
 	val email: String = "",

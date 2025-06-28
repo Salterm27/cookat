@@ -1,21 +1,33 @@
+import java.util.Properties
+
 plugins {
 	alias(libs.plugins.android.application)
 	alias(libs.plugins.kotlin.android)
 	alias(libs.plugins.kotlin.compose)
+	alias(libs.plugins.kotlin.serialization)
+
 }
 
 android {
 	namespace = "com.example.cookat"
 	compileSdk = 36
 
+
 	defaultConfig {
 		applicationId = "com.example.cookat"
 		minSdk = 29
-		targetSdk = 35
+		targetSdk = 34
 		versionCode = 1
 		versionName = "1.0"
 
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+		// 👇 NEW: Load from local.properties
+		val localProps = Properties()
+		localProps.load(rootProject.file("local.properties").inputStream())
+
+		buildConfigField("String", "SUPABASE_URL", "\"${localProps["SUPABASE_URL"]}\"")
+		buildConfigField("String", "SUPABASE_ANON_KEY", "\"${localProps["SUPABASE_ANON_KEY"]}\"")
+		buildConfigField("String", "COOKAT_URL", "\"${localProps["COOKAT_URL"]}\"")
 	}
 
 	buildTypes {
@@ -31,11 +43,14 @@ android {
 		sourceCompatibility = JavaVersion.VERSION_11
 		targetCompatibility = JavaVersion.VERSION_11
 	}
-	kotlinOptions {
-		jvmTarget = "11"
+	kotlin {
+		compilerOptions {
+			jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+		}
 	}
 	buildFeatures {
 		compose = true
+		buildConfig = true
 	}
 }
 
@@ -61,11 +76,15 @@ dependencies {
 	implementation(libs.lifecycle)
 	implementation(libs.fragment)
 	implementation(libs.androidx.navigation.fragment)
-	implementation(platform(libs.supabase.bom))
-	implementation(libs.supabase.postgrest)
-	implementation(libs.supabase.auth)
-	implementation(libs.supabase.storage)
-	implementation(libs.ktor.client.android)
+	implementation(platform(libs.supabaseBom))
+	implementation(libs.supabasePostgrest)
+	implementation(libs.supabaseAuth)
+	implementation(libs.ktorClientAndroid)
+	implementation(libs.retrofit)
+	implementation(libs.retrofit.gson)
+	implementation(libs.okhttp)
+	implementation(libs.okhttp.logging)
+	implementation(libs.datastore.preferences)
 
 	testImplementation(libs.junit)
 	androidTestImplementation(libs.androidx.junit)
