@@ -6,10 +6,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cookat.models.auth.LoginUiState
+import com.example.cookat.repository.AuthRepository
 import kotlinx.coroutines.launch
 
+class LoginViewModel(
+	private val authRepository: AuthRepository = AuthRepository()
+) : ViewModel() {
 
-class LoginViewModel : ViewModel() {
 	var uiState by mutableStateOf(LoginUiState())
 		private set
 
@@ -23,15 +26,18 @@ class LoginViewModel : ViewModel() {
 
 	fun login(onSuccess: () -> Unit) {
 		viewModelScope.launch {
-			uiState = uiState.copy(isLoading = true)
-			if (uiState.email == "test@example.com" && uiState.password == "password") {
-				uiState = uiState.copy(isLoading = false, errorMessage = null)
+			uiState = uiState.copy(isLoading = true, errorMessage = null)
+
+			val result = authRepository.login(uiState.email, uiState.password)
+
+			if (result.isSuccess) {
+				uiState = uiState.copy(isLoading = false)
 				onSuccess()
 			} else {
 				uiState = uiState.copy(
 					isLoading = false,
 					password = "",
-					errorMessage = "Invalid email or password"
+					errorMessage = result.exceptionOrNull()?.message ?: "Unknown error"
 				)
 			}
 		}
