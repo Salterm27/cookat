@@ -18,6 +18,10 @@ import com.example.cookat.screens.recipes.NewRecipe
 import com.example.cookat.screens.settings.MySettings
 import com.example.cookat.ui.theme.CookatTheme
 
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import com.example.cookat.screens.recipes.RecipeDetails
+
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +67,14 @@ fun AppNavigation() {
 
 		composable("newRecipe") {
 			NewRecipe(onNavigateTo = { navController.navigate("auth") })
+		}
+
+		composable(
+			"recipe/{id}",
+			arguments = listOf(navArgument("id") { type = NavType.StringType })
+		) { backStackEntry ->
+			val recipeId = backStackEntry.arguments?.getString("id") ?: ""
+			RecipeDetails(id = recipeId, navController = navController)
 		}
 
 		composable("settings") {
