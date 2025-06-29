@@ -1,4 +1,4 @@
-package com.example.cookat.data.local
+package com.example.cookat.data.local.session
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
