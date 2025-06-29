@@ -5,11 +5,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -22,6 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.cookat.screens.home.sidemenu.DrawerContent
 import com.example.cookat.viewmodels.home.HomeViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +53,24 @@ fun HomeScreen(navController: NavController) {
 	) {
 		Scaffold(
 			topBar = {
-				// TODO: Add your TopAppBar here if you want it
+				TopAppBar(
+					title = { Text("Home") },
+					navigationIcon = {
+						IconButton(onClick = {
+							scope.launch { drawerState.open() }
+						}) {
+							Icon(Icons.Default.Menu, contentDescription = "Open menu")
+						}
+					},
+					actions = {
+						IconButton(onClick = { /* TODO: Search */ }) {
+							Icon(Icons.Default.Search, contentDescription = "Search")
+						}
+						IconButton(onClick = { /* TODO: Favorites */ }) {
+							Icon(Icons.Default.FavoriteBorder, contentDescription = "Favorites")
+						}
+					}
+				)
 			}
 		) { padding ->
 			Column(

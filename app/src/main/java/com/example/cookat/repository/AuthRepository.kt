@@ -1,7 +1,7 @@
 package com.example.cookat.repository
 
 import android.content.Context
-import com.example.cookat.data.local.SessionManager
+import com.example.cookat.data.local.session.SessionManager
 import com.example.cookat.data.remote.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email

@@ -2,7 +2,7 @@ package com.example.cookat.network
 
 import android.content.Context
 import com.example.cookat.BuildConfig
-import com.example.cookat.data.local.SessionManager
+import com.example.cookat.data.local.session.SessionManager
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
