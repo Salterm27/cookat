@@ -1,7 +1,7 @@
 package com.example.cookat.repository
 
 import android.content.Context
-import com.example.cookat.models.dbModels.RecipeModel
+import com.example.cookat.models.dbModels.recipes.RecipeModel
 import com.example.cookat.network.BackendClient
 
 class HomeRepository(context: Context) {
@@ -10,8 +10,8 @@ class HomeRepository(context: Context) {
 
 	suspend fun getRecipes(): Result<List<RecipeModel>> {
 		return try {
-			val recipes = api.getRecipes()
-			Result.success(recipes)
+			val response = api.getRecipes() // gets RecipesResponse
+			Result.success(response.results) // unwrap the list you actually need
 		} catch (e: Exception) {
 			Result.failure(e)
 		}

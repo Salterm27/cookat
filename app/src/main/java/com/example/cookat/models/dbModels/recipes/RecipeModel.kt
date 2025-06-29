@@ -1,4 +1,4 @@
-package com.example.cookat.models.dbModels
+package com.example.cookat.models.dbModels.recipes
 
 import java.util.Date
 

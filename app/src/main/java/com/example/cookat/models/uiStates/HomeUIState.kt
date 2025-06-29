@@ -1,6 +1,6 @@
 package com.example.cookat.models.uiStates
 
-import com.example.cookat.models.dbModels.RecipeModel
+import com.example.cookat.models.dbModels.recipes.RecipeModel
 
 data class HomeUiState(
 	val isLoading: Boolean = false,
