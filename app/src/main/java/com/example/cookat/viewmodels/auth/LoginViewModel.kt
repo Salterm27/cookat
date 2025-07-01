@@ -36,10 +36,23 @@ class LoginViewModel(
 				uiState = uiState.copy(isLoading = false)
 				onSuccess()
 			} else {
+				val rawMessage = result.exceptionOrNull()?.message.orEmpty()
+
+				
+				val friendlyMessage = when {
+					rawMessage.contains("invalid_credentials", ignoreCase = true) ->
+						"Email o contraseña incorrectos"
+
+					rawMessage.contains("network", ignoreCase = true) ->
+						"Error de conexión. Verifica tu internet."
+
+					else -> "Ups, algo salió mal. Intenta de nuevo."
+				}
+
 				uiState = uiState.copy(
 					isLoading = false,
 					password = "",
-					errorMessage = result.exceptionOrNull()?.message ?: "Unknown error"
+					errorMessage = friendlyMessage
 				)
 			}
 		}
