@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.1"
+agp = "8.11.0"
 kotlin = "2.2.0"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -22,7 +22,7 @@ gson = "2.13.1"
 datastore = "1.1.7"
 room = "2.7.2"
 ksp = "2.2.0-2.0.2"
-compose = "1.6.1"
+compose = "1.7.8"
 
 
 [libraries]
@@ -60,10 +60,8 @@ datastore-preferences = { module = "androidx.datastore:datastore-preferences", v
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
-<<<<<<< HEAD
 compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "compose" }
-=======
->>>>>>> 0a7b1c10a2efa2fdfb93e1d78f4e3baf55f57288
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -89,11 +89,8 @@ dependencies {
 	implementation(libs.room.runtime)
 	implementation(libs.room.ktx)
 	ksp(libs.room.compiler)
-<<<<<<< HEAD
 	implementation(libs.compose.material.icons.extended)
-=======
 
->>>>>>> 0a7b1c10a2efa2fdfb93e1d78f4e3baf55f57288
 
 	testImplementation(libs.junit)
 	androidTestImplementation(libs.androidx.junit)
