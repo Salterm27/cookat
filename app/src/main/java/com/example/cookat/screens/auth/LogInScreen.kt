@@ -42,8 +42,6 @@ fun LogInScreen(
 	onNavigateToPassword: () -> Unit,
 ) {
 	val context = LocalContext.current
-
-	// ✅ Correct way to pass Context
 	val viewModel: LoginViewModel = viewModel(factory = object : ViewModelProvider.Factory {
 		override fun <T : ViewModel> create(modelClass: Class<T>): T {
 			return LoginViewModel(context.applicationContext) as T
