@@ -3,6 +3,7 @@ package com.example.cookat.models.dbModels.recipes
 data class RecipeModel(
 	val id: String = "",
 	val userID: String = "",
+	val username: String? = null,
 	val title: String = "",
 	val description: String = "",
 	val type: String? = null,

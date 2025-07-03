@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class RecipeEntity(
 	@PrimaryKey val id: String,
 	val userID: String,
+	val username: String?,
 	val title: String,
 	val description: String,
 	val portions: Int,
@@ -14,5 +15,4 @@ data class RecipeEntity(
 	val createdAt: String?,
 	val type: String?,
 	val editedDate: String?
-	// You can skip nested lists (ingredients) for now or store them as JSON if needed.
 )

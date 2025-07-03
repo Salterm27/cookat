@@ -17,17 +17,17 @@ class RecipeRepository(context: Context) {
 	suspend fun getRecipeById(id: String): Result<RecipeModel> {
 		return withContext(Dispatchers.IO) {
 			try {
-				// 1️⃣ Try local DB
+				// Try local DB
 				val local = dao.getRecipeById(id)?.toModel()
 				if (local != null) {
 					return@withContext Result.success(local)
 				}
 
-				// 2️⃣ Otherwise fetch from backend
-				val remote = api.getRecipeById(id) // your API call
-				dao.insert(remote.toEntity())      // cache it locally
+				// Otherwise fetch from backend
+				val remote = api.getRecipeById(id)
+				dao.insert(remote.toEntity())
 
-				Result.success(remote)
+				Result.success(remote.toModel())
 
 			} catch (e: Exception) {
 				Result.failure(e)

@@ -130,11 +130,11 @@ fun RecipeDetails(
 								.fillMaxWidth()
 								.height(200.dp)
 						)
-						Text("by ${recipe.userID}", modifier = Modifier.padding(16.dp))
-						Text("Portions: ${recipe.portions}", modifier = Modifier.padding(16.dp))
-						Text("Ingredients", modifier = Modifier.padding(16.dp))
+						Text("Autor ${recipe.userID}", modifier = Modifier.padding(16.dp))
+						Text("Porciones: ${recipe.portions}", modifier = Modifier.padding(16.dp))
+						Text("Ingredientes", modifier = Modifier.padding(16.dp))
 					}
-					// Add items for your ingredients + steps...
+					//TODO: Add items for your ingredients + steps...
 				}
 			}
 		}
