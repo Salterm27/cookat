@@ -1,32 +1,37 @@
 package com.example.cookat.screens.auth
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.input.*
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.cookat.data.local.session.SessionManager
-import com.example.cookat.network.BackendClient
 import com.example.cookat.repository.AuthRepository
-import com.example.cookat.repository.UserRepository
 import com.example.cookat.viewmodels.profile.RegisterViewModel
 
 @Composable
 fun RegisterScreen(onNavigateTo: () -> Unit) {
-	val context = LocalContext.current
-	val sessionManager = remember { SessionManager(context) }
 	val viewModel: RegisterViewModel = viewModel {
 		RegisterViewModel(
-			authRepository = AuthRepository(sessionManager),
-			userRepository = UserRepository(
-				backendApi = BackendClient.create(context),
-				sessionManager = SessionManager(context)
-			)
+			authRepository = AuthRepository(),
 		)
 	}
 
@@ -84,7 +89,8 @@ fun RegisterScreen(onNavigateTo: () -> Unit) {
 				Button(onClick = {
 					viewModel.register {
 						onNavigateTo() // ← esto lleva al Home
-					}}) {
+					}
+				}) {
 					Text("Registrarse")
 				}
 			}
