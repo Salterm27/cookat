@@ -8,11 +8,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-
 class RegisterViewModel(
-	private val authRepository: AuthRepository,
-
-	) : ViewModel() {
+	private val authRepository: AuthRepository
+) : ViewModel() {
 
 	private val _uiState = MutableStateFlow(RegisterUiState())
 	val uiState: StateFlow<RegisterUiState> = _uiState
@@ -43,19 +41,28 @@ class RegisterViewModel(
 
 			val result = authRepository.signUp(
 				email = _uiState.value.email,
-				password = _uiState.value.password,
+				password = _uiState.value.password
 			)
 
 			if (result.isSuccess) {
 				onSuccess()
 			} else {
+				val rawMessage = result.exceptionOrNull()?.message ?: "Error inesperado"
+
+				//  Manejo de errores específico
+				val userFriendlyMessage = when {
+					rawMessage.contains("user_already_exists", ignoreCase = true) ->
+						"El correo ya está registrado. Intenta iniciar sesión."
+
+					else ->
+						"No se pudo registrar: $rawMessage"
+				}
+
 				_uiState.value = _uiState.value.copy(
 					isLoading = false,
-					error = result.exceptionOrNull()?.message ?: "Error inesperado"
+					error = userFriendlyMessage
 				)
 			}
 		}
 	}
-
-
 }

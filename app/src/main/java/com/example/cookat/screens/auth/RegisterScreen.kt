@@ -8,12 +8,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,8 +33,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cookat.repository.AuthRepository
 import com.example.cookat.viewmodels.profile.RegisterViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(onNavigateTo: () -> Unit) {
+fun RegisterScreen(
+	onNavigateTo: () -> Unit,
+	onNavigateBack: () -> Unit
+) {
 	val viewModel: RegisterViewModel = viewModel {
 		RegisterViewModel(
 			authRepository = AuthRepository(),
@@ -37,7 +47,21 @@ fun RegisterScreen(onNavigateTo: () -> Unit) {
 
 	val state by viewModel.uiState.collectAsState()
 
-	Scaffold { padding ->
+	Scaffold(
+		topBar = {
+			TopAppBar(
+				title = { Text("Crear cuenta") },
+				navigationIcon = {
+					IconButton(onClick = onNavigateBack) {
+						Icon(
+							imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+							contentDescription = "Volver"
+						)
+					}
+				}
+			)
+		}
+	) { padding ->
 		Column(
 			modifier = Modifier
 				.fillMaxSize()
@@ -88,7 +112,7 @@ fun RegisterScreen(onNavigateTo: () -> Unit) {
 			} else {
 				Button(onClick = {
 					viewModel.register {
-						onNavigateTo() // ← esto lleva al Home
+						onNavigateTo()
 					}
 				}) {
 					Text("Registrarse")

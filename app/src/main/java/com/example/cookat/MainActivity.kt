@@ -17,7 +17,6 @@ import com.example.cookat.screens.auth.PasswordScreen
 import com.example.cookat.screens.auth.RegisterScreen
 import com.example.cookat.screens.auth.ValidatePasswordScreen
 import com.example.cookat.screens.home.HomeScreen
-import com.example.cookat.screens.profile.MyProfile
 import com.example.cookat.screens.recipes.NewRecipe
 import com.example.cookat.screens.recipes.RecipeDetails
 import com.example.cookat.screens.settings.MySettings
@@ -67,7 +66,11 @@ fun AppNavigation() {
 			)
 		}
 		composable("register") {
-			RegisterScreen(onNavigateTo = { navController.navigate("login") })
+			RegisterScreen(
+				onNavigateTo = {
+					navController.navigate("login")
+				},
+				onNavigateBack = { navController.navigate("login") })
 		}
 		composable("auth") {
 			HomeScreen(navController)
