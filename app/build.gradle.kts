@@ -5,6 +5,7 @@ plugins {
 	alias(libs.plugins.kotlin.android)
 	alias(libs.plugins.kotlin.compose)
 	alias(libs.plugins.kotlin.serialization)
+	id("com.google.devtools.ksp") version "2.2.0-2.0.2"
 
 }
 
@@ -27,6 +28,7 @@ android {
 
 		buildConfigField("String", "SUPABASE_URL", "\"${localProps["SUPABASE_URL"]}\"")
 		buildConfigField("String", "SUPABASE_ANON_KEY", "\"${localProps["SUPABASE_ANON_KEY"]}\"")
+		buildConfigField("String", "COOKAT_URL", "\"${localProps["COOKAT_URL"]}\"")
 	}
 
 	buildTypes {
@@ -81,8 +83,16 @@ dependencies {
 	implementation(libs.supabasePostgrest)
 	implementation(libs.supabaseAuth)
 	implementation(libs.ktorClientAndroid)
+
+	implementation(libs.retrofit.core)
+	implementation(libs.retrofit.converter.gson)
+	implementation(libs.okhttp.logging.interceptor)
+	implementation(libs.gson)
+	implementation(libs.datastore.preferences)
+	implementation(libs.datastore.core)
 	implementation(libs.room.runtime)
 	implementation(libs.room.ktx)
+	ksp(libs.room.compiler)
 
 
 	testImplementation(libs.junit)

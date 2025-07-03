@@ -5,12 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cookat.models.auth.LoginUiState
+import com.example.cookat.models.uiStates.LoginUiState
 import com.example.cookat.repository.AuthRepository
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-	private val authRepository: AuthRepository = AuthRepository()
+	private val authRepository: AuthRepository
 ) : ViewModel() {
 
 	var uiState by mutableStateOf(LoginUiState())
@@ -28,16 +28,27 @@ class LoginViewModel(
 		viewModelScope.launch {
 			uiState = uiState.copy(isLoading = true, errorMessage = null)
 
-			val result = authRepository.login(uiState.email, uiState.password)
+			val result = authRepository.login(uiState.email.trim(), uiState.password)
 
 			if (result.isSuccess) {
 				uiState = uiState.copy(isLoading = false)
 				onSuccess()
 			} else {
+				val rawError = result.exceptionOrNull()?.message ?: ""
+				val friendlyMessage = when {
+					rawError.contains("invalid_credentials", ignoreCase = true) -> {
+						"El email o la contraseña son incorrectos."
+					}
+
+					else -> {
+						"Ocurrió un error inesperado. Intenta de nuevo."
+					}
+				}
+
 				uiState = uiState.copy(
 					isLoading = false,
 					password = "",
-					errorMessage = result.exceptionOrNull()?.message ?: "Unknown error"
+					errorMessage = friendlyMessage
 				)
 			}
 		}
