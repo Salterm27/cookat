@@ -37,33 +37,33 @@ class RegisterViewModel(
 	}
 
 	fun register(onSuccess: () -> Unit) {
-		val state = _uiState.value
-
-		if (state.password != state.confirmPassword) {
-			_uiState.value = state.copy(error = "Las contraseñas no coinciden")
-			return
-		}
-
 		viewModelScope.launch {
-			_uiState.value = state.copy(isLoading = true, error = null)
+			_uiState.value = _uiState.value.copy(isLoading = true, error = null)
 
-			val result = authRepository.signUp(state.email.trim(), state.password)
-			if (result.isSuccess) {
-				// crear usuario en tu base
-				val id = authRepository.getUserId()
-				if (id != null) {
-					userRepository.createUser(id, state.email)
-					_uiState.value = _uiState.value.copy(isLoading = false)
-					onSuccess()
-				} else {
-					_uiState.value = state.copy(isLoading = false, error = "No se pudo obtener el ID")
-				}
-			} else {
-				_uiState.value = state.copy(
+			if (_uiState.value.password != _uiState.value.confirmPassword) {
+				_uiState.value = _uiState.value.copy(
 					isLoading = false,
-					error = result.exceptionOrNull()?.message ?: "Error desconocido"
+					error = "Las contraseñas no coinciden."
+				)
+				return@launch
+			}
+
+			val result = authRepository.signUp(
+				email = _uiState.value.email,
+				password = _uiState.value.password,
+				userRepository = userRepository
+			)
+
+			if (result.isSuccess) {
+				onSuccess()
+			} else {
+				_uiState.value = _uiState.value.copy(
+					isLoading = false,
+					error = result.exceptionOrNull()?.message ?: "Error inesperado"
 				)
 			}
 		}
 	}
+
+
 }

@@ -81,7 +81,10 @@ fun RegisterScreen(onNavigateTo: () -> Unit) {
 			if (state.isLoading) {
 				CircularProgressIndicator()
 			} else {
-				Button(onClick = { viewModel.register(onNavigateTo) }) {
+				Button(onClick = {
+					viewModel.register {
+						onNavigateTo() // ← esto lleva al Home
+					}}) {
 					Text("Registrarse")
 				}
 			}
