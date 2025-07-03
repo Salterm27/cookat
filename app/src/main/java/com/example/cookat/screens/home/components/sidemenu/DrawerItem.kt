@@ -1,18 +1,17 @@
-package com.example.cookat.screens.home.sidemenu
+package com.example.cookat.screens.home.components.sidemenu
 
-import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-
+import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun DrawerItem(title: String, onClick: (() -> Unit)? = null ) {
+fun DrawerItem(title: String, onClick: (() -> Unit)? = null) {
 	val isEnabled = onClick != null
 	val textColor = if (isEnabled) {
 		MaterialTheme.colorScheme.onSurface

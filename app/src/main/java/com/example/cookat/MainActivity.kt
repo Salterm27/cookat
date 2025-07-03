@@ -97,7 +97,7 @@ fun AppNavigation() {
 			arguments = listOf(navArgument("id") { type = NavType.StringType })
 		) { backStackEntry ->
 			val recipeId = backStackEntry.arguments?.getString("id") ?: ""
-			RecipeDetails(id = recipeId, navController = navController)
+			RecipeDetails(recipeId = recipeId, navController = navController)
 		}
 		composable("settings") {
 			MySettings(onNavigateTo = { navController.navigate("auth") })

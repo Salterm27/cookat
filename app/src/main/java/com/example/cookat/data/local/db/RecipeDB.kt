@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.cookat.data.local.entities.RecipeEntity
 
-@Database(entities = [RecipeEntity::class], version = 2)
+@Database(entities = [RecipeEntity::class], version = 4)
 abstract class RecipeDB : RoomDatabase() {
 	abstract fun recipeDao(): RecipeDAO
 

@@ -38,17 +38,19 @@ import com.example.cookat.ui.theme.Error
 import com.example.cookat.viewmodels.auth.LoginViewModel
 
 @Composable
-fun LogInScreen(    onLoginSuccess: () -> Unit,
-					onNavigateToRegister: () -> Unit,
-					onNavigateToPassword: () -> Unit,
-					) {
-	val context = LocalContext.current
-	val sessionManager = remember { SessionManager(context) }
-	val repository = remember { AuthRepository(sessionManager) }
-
+fun LogInScreen(
+	onLoginSuccess: () -> Unit,
+	onNavigateToRegister: () -> Unit,
+	onNavigateToPassword: () -> Unit,
+) {
 	val viewModel: LoginViewModel = viewModel(factory = object : ViewModelProvider.Factory {
 		override fun <T : ViewModel> create(modelClass: Class<T>): T {
-			return LoginViewModel(repository) as T
+			val repository = AuthRepository()
+			if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+				@Suppress("UNCHECKED_CAST")
+				return LoginViewModel(repository) as T
+			}
+			throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
 		}
 	})
 

@@ -9,29 +9,25 @@ import com.example.cookat.network.BackendClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class HomeRepository(context: Context) {
+class RecipeRepository(context: Context) {
 
 	private val api = BackendClient.create(context)
 	private val dao = RecipeDB.getDatabase(context).recipeDao()
 
-	suspend fun getRecipes(): Result<List<RecipeModel>> {
+	suspend fun getRecipeById(id: String): Result<RecipeModel> {
 		return withContext(Dispatchers.IO) {
 			try {
-				// ⃣ Try local DB first
-				val localRecipes = dao.getRecipes().map { it.toModel() }
-				if (localRecipes.isNotEmpty()) {
-					return@withContext Result.success(localRecipes)
+				// Try local DB
+				val local = dao.getRecipeById(id)?.toModel()
+				if (local != null) {
+					return@withContext Result.success(local)
 				}
 
-				// If empty, fetch from backend
-				val response = api.getRecipes() // RecipesResponse
-				val remoteRecipes = response.results
+				// Otherwise fetch from backend
+				val remote = api.getRecipeById(id)
+				dao.insert(remote.toEntity())
 
-				// 3️⃣ Save to local DB
-				dao.clearRecipes()
-				dao.insertAll(remoteRecipes.map { it.toEntity() })
-
-				Result.success(remoteRecipes)
+				Result.success(remote.toModel())
 
 			} catch (e: Exception) {
 				Result.failure(e)
