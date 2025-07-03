@@ -28,6 +28,9 @@ interface BackendEndpoints {
 	@PUT("users")
 	suspend fun updateUser(@Body user: UserModel): UserModel
 
+	@POST("users")
+	suspend fun createUser(@Body user: UserModel): UserModel
+
 	@DELETE("users")
 	suspend fun deleteUser(): Unit
 
