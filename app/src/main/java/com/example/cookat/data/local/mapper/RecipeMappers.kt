@@ -1,9 +1,10 @@
 package com.example.cookat.data.local.mapper
 
-import android.R.attr.rating
 import com.example.cookat.data.local.entities.RecipeEntity
 import com.example.cookat.models.dbModels.recipes.RecipeModel
 import com.example.cookat.network.dto.RecipeDto
+
+// === Entity <-> Model ===
 
 fun RecipeEntity.toModel() = RecipeModel(
 	id = id,
@@ -16,7 +17,8 @@ fun RecipeEntity.toModel() = RecipeModel(
 	createdAt = createdAt,
 	type = type,
 	editedDate = editedDate,
-	rating = rating
+	rating = rating,
+	isFavourite = isFavourite
 )
 
 fun RecipeModel.toEntity() = RecipeEntity(
@@ -30,25 +32,13 @@ fun RecipeModel.toEntity() = RecipeEntity(
 	createdAt = createdAt,
 	type = type,
 	editedDate = editedDate,
-	rating = rating
+	rating = rating,
+	isFavourite = isFavourite
 )
 
-fun RecipeDto.toEntity() = RecipeEntity(
-	id = id,
-	userID = userID,
-	username = username,
-	title = title,
-	description = description,
-	// map instructions if you store them
-	portions = portions,
-	isApproved = isApproved,
-	createdAt = createdAt,
-	type = type,
-	editedDate = editedDate,
-	rating = rating
-)
+// === DTO -> Entity ===
 
-fun RecipeDto.toModel() = RecipeModel(
+fun RecipeDto.toEntity(isFavourite: Boolean = false) = RecipeEntity(
 	id = id,
 	userID = userID,
 	username = username,
@@ -59,6 +49,23 @@ fun RecipeDto.toModel() = RecipeModel(
 	createdAt = createdAt,
 	type = type,
 	editedDate = editedDate,
-	rating = rating
+	rating = rating,
+	isFavourite = isFavourite
+)
 
+// === DTO -> Model ===
+
+fun RecipeDto.toModel(isFavourite: Boolean = false) = RecipeModel(
+	id = id,
+	userID = userID,
+	username = username,
+	title = title,
+	description = description,
+	portions = portions,
+	isApproved = isApproved,
+	createdAt = createdAt,
+	type = type,
+	editedDate = editedDate,
+	rating = rating,
+	isFavourite = isFavourite
 )
