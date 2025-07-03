@@ -1,5 +1,6 @@
 package com.example.cookat.data.local.mapper
 
+import android.R.attr.rating
 import com.example.cookat.data.local.entities.RecipeEntity
 import com.example.cookat.models.dbModels.recipes.RecipeModel
 import com.example.cookat.network.dto.RecipeDto
@@ -14,7 +15,8 @@ fun RecipeEntity.toModel() = RecipeModel(
 	isApproved = isApproved,
 	createdAt = createdAt,
 	type = type,
-	editedDate = editedDate
+	editedDate = editedDate,
+	rating = rating
 )
 
 fun RecipeModel.toEntity() = RecipeEntity(
@@ -27,7 +29,8 @@ fun RecipeModel.toEntity() = RecipeEntity(
 	isApproved = isApproved,
 	createdAt = createdAt,
 	type = type,
-	editedDate = editedDate
+	editedDate = editedDate,
+	rating = rating
 )
 
 fun RecipeDto.toEntity() = RecipeEntity(
@@ -41,7 +44,8 @@ fun RecipeDto.toEntity() = RecipeEntity(
 	isApproved = isApproved,
 	createdAt = createdAt,
 	type = type,
-	editedDate = editedDate
+	editedDate = editedDate,
+	rating = rating
 )
 
 fun RecipeDto.toModel() = RecipeModel(
@@ -54,5 +58,7 @@ fun RecipeDto.toModel() = RecipeModel(
 	isApproved = isApproved,
 	createdAt = createdAt,
 	type = type,
-	editedDate = editedDate
+	editedDate = editedDate,
+	rating = rating
+
 )

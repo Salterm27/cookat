@@ -14,5 +14,6 @@ data class RecipeEntity(
 	val isApproved: Boolean,
 	val createdAt: String?,
 	val type: String?,
-	val editedDate: String?
+	val editedDate: String?,
+	val rating: Double
 )

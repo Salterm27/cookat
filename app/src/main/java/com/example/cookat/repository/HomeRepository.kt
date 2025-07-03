@@ -17,13 +17,13 @@ class HomeRepository(context: Context) {
 	suspend fun getRecipes(): Result<List<RecipeModel>> {
 		return withContext(Dispatchers.IO) {
 			try {
-				// 1️⃣ Try local DB first
+				// ⃣ Try local DB first
 				val localRecipes = dao.getRecipes().map { it.toModel() }
 				if (localRecipes.isNotEmpty()) {
 					return@withContext Result.success(localRecipes)
 				}
 
-				// 2️⃣ If empty, fetch from backend
+				// If empty, fetch from backend
 				val response = api.getRecipes() // RecipesResponse
 				val remoteRecipes = response.results
 

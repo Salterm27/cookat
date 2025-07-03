@@ -16,7 +16,7 @@ class RecipeViewModel(
 	private val _uiState = MutableStateFlow(RecipeUiState())
 	val uiState: StateFlow<RecipeUiState> = _uiState
 
-	// ✅ VISUAL-ONLY FAVORITE TOGGLE
+	// VISUAL-ONLY FAVORITE TOGGLE
 	private val _isFavorite = MutableStateFlow(false)
 	val isFavorite: StateFlow<Boolean> = _isFavorite
 

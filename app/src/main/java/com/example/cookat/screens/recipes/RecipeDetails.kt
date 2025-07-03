@@ -130,7 +130,7 @@ fun RecipeDetails(
 								.fillMaxWidth()
 								.height(200.dp)
 						)
-						Text("Autor ${recipe.userID}", modifier = Modifier.padding(16.dp))
+						Text("Por ${recipe.username}", modifier = Modifier.padding(16.dp))
 						Text("Porciones: ${recipe.portions}", modifier = Modifier.padding(16.dp))
 						Text("Ingredientes", modifier = Modifier.padding(16.dp))
 					}

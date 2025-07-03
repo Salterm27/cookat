@@ -10,5 +10,6 @@ data class RecipeModel(
 	val portions: Int = 0,
 	val isApproved: Boolean = false,
 	val createdAt: String? = null,
-	val editedDate: String? = null
+	val editedDate: String? = null,
+	val rating: Double = 0.0,
 )

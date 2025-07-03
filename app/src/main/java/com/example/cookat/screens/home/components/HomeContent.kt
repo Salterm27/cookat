@@ -39,7 +39,7 @@ fun HomeContent(
 				val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
 
 				state.recipes.forEach { recipeModel: RecipeModel ->
-					val updatedAt = recipeModel.editedDate?.let {
+					val editedDate = recipeModel.editedDate?.let {
 						try {
 							formatter.parse(it)
 						} catch (e: Exception) {
@@ -47,23 +47,13 @@ fun HomeContent(
 						}
 					} ?: Date()
 
-					val recipeCard = RecipeCardData(
-						id = recipeModel.id,
-						title = recipeModel.title,
-						author = "Autor desconocido", // Replace when you have it
-						vote = 4.5f,
-						isFavorite = false,
-						imageUrl = null,
-						updatedAt = updatedAt
-					)
-
 					RecipeCard(
-						recipe = recipeCard,
+						recipe = recipeModel,
 						onClick = {
-							navController.navigate("recipe/${recipeCard.id}")
+							navController.navigate("recipe/${recipeModel.id}")
 						},
 						onToggleFavorite = { isFav ->
-							println("Receta ${recipeCard.id} marcada como favorita: $isFav")
+							println("Receta ${recipeModel.id} marcada como favorita: $isFav")
 						}
 					)
 				}

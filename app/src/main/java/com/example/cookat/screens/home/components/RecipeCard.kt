@@ -37,26 +37,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.cookat.R
+import com.example.cookat.models.dbModels.recipes.RecipeModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-data class RecipeCardData(
-	val id: String,
-	val title: String,
-	val author: String,
-	val vote: Float = 4.5f,
-	val isFavorite: Boolean = false,
-	val imageUrl: String? = null,
-	val updatedAt: Date = Date()
-)
-
 @Composable
 fun RecipeCard(
-	recipe: RecipeCardData,
+	recipe: RecipeModel,
 	onClick: () -> Unit,
 	onToggleFavorite: (Boolean) -> Unit
 ) {
+	val updatedAt = recipe.editedDate?.let {
+		try {
+			SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(it)
+		} catch (e: Exception) {
+			null
+		}
+	} ?: Date()
+
 	Card(
 		modifier = Modifier
 			.fillMaxWidth()
@@ -92,7 +91,7 @@ fun RecipeCard(
 						maxLines = 1
 					)
 					Text(
-						text = "By ${recipe.author}",
+						text = "By ${recipe.username ?: recipe.userID.ifBlank { "Desconocido" }}",
 						style = MaterialTheme.typography.bodySmall,
 						color = Color.Gray
 					)
@@ -105,11 +104,11 @@ fun RecipeCard(
 					) {
 						Row {
 							repeat(5) { i ->
-								val starFilled = i < recipe.vote.toInt()
+								val starFilled = i < recipe.rating.toInt()
 								Icon(
 									imageVector = if (starFilled) Icons.Filled.Star else Icons.Filled.StarBorder,
 									contentDescription = null,
-									tint = if (starFilled) Color(0xFF000000) else Color.Gray,
+									tint = if (starFilled) Color.Black else Color.Gray,
 									modifier = Modifier.size(18.dp)
 								)
 							}
@@ -120,7 +119,7 @@ fun RecipeCard(
 						val formatter =
 							remember { SimpleDateFormat("dd/MM/yy", Locale.getDefault()) }
 						Text(
-							text = "Updated: ${formatter.format(recipe.updatedAt)}",
+							text = "Updated: ${formatter.format(updatedAt)}",
 							style = MaterialTheme.typography.bodySmall,
 							color = Color.Gray
 						)
@@ -128,7 +127,8 @@ fun RecipeCard(
 				}
 			}
 
-			var favoriteState by remember { mutableStateOf(recipe.isFavorite) }
+			var favoriteState by remember { mutableStateOf(false) } // Visual only
+			// TODO: Hook to real favorites API later!
 
 			IconButton(
 				onClick = {
