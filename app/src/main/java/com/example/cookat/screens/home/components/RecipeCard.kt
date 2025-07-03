@@ -127,22 +127,22 @@ fun RecipeCard(
 				}
 			}
 
-			var favoriteState by remember { mutableStateOf(false) } // Visual only
+			var favouriteState by remember { mutableStateOf(false) } // Visual only
 			// TODO: Hook to real favorites API later!
 
 			IconButton(
 				onClick = {
-					favoriteState = !favoriteState
-					onToggleFavorite(favoriteState)
+					favouriteState = !favouriteState
+					onToggleFavorite(favouriteState)
 				},
 				modifier = Modifier
 					.align(Alignment.TopEnd)
 					.padding(8.dp)
 			) {
 				Icon(
-					imageVector = if (favoriteState) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+					imageVector = if (favouriteState) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
 					contentDescription = "Favorite",
-					tint = if (favoriteState) Color.Red else Color.Gray
+					tint = if (favouriteState) Color.Red else Color.Gray
 				)
 			}
 		}
