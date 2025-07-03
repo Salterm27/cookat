@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.cookat.models.dbModels.users.ProfileScreen
 import com.example.cookat.network.BackendClient
 import com.example.cookat.screens.auth.LogInScreen
 import com.example.cookat.screens.auth.PasswordScreen
@@ -78,8 +79,16 @@ fun AppNavigation() {
 			ValidatePasswordScreen(onNavigateTo = { navController.navigate("login") })
 		}
 		composable("profile") {
+			ProfileScreen(
+				onNavigateTo = { navController.navigate("auth") }
+			)
+		}
+		/*
+		composable("profile") {
 			MyProfile(onNavigateTo = { navController.navigate("auth") })
 		}
+
+		 */
 		composable("newRecipe") {
 			NewRecipe(onNavigateTo = { navController.navigate("auth") })
 		}

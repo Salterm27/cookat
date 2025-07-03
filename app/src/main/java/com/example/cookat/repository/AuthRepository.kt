@@ -1,11 +1,12 @@
 package com.example.cookat.repository
 
+import com.example.cookat.data.local.session.SessionManager
 import com.example.cookat.data.remote.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.exceptions.BadRequestRestException
 
-class AuthRepository {
+class AuthRepository(private val sessionManager: SessionManager) {
 
 	private val auth = SupabaseClient.client.auth
 
@@ -15,6 +16,11 @@ class AuthRepository {
 				this.email = email
 				this.password = password
 			}
+			val accessToken = auth.currentSessionOrNull()?.accessToken
+			if (accessToken != null) {
+				sessionManager.saveAccessToken(accessToken)
+			}
+			println("Bearer token after login: $accessToken")  // <-- acá lo imprimís
 			Result.success(Unit)
 		} catch (e: BadRequestRestException) {
 			Result.failure(Exception("Invalid email or password"))

@@ -1,6 +1,7 @@
 package com.example.cookat.network
 
 import android.content.Context
+import android.util.Log
 import com.example.cookat.BuildConfig
 import com.example.cookat.data.local.session.SessionManager
 import kotlinx.coroutines.runBlocking
@@ -19,6 +20,7 @@ object BackendClient {
 
 		val authInterceptor = Interceptor { chain ->
 			val token = runBlocking { SessionManager(context).getAccessToken() } ?: ""
+			//Log.d("AUTH_TOKEN", "Bearer $token")
 			val request = chain.request().newBuilder()
 				.addHeader("Authorization", "Bearer $token")
 				.build()

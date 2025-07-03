@@ -1,8 +1,17 @@
 package com.example.cookat.viewmodels.profile
 
+import android.content.Context
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.cookat.data.local.session.SessionManager
 import com.example.cookat.data.remote.SupabaseClient
+import com.example.cookat.models.dbModels.users.UserModelFactory
+import com.example.cookat.network.BackendClient
+import com.example.cookat.repository.UserRepository
 import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +26,9 @@ data class UserProfileState(
 	val error: String? = null
 )
 
-class ProfileViewModel : ViewModel() {
+class ProfileViewModel(
+	private val userRepository: UserRepository
+) : ViewModel() {
 
 	private val _state = MutableStateFlow(UserProfileState())
 	val state: StateFlow<UserProfileState> = _state
@@ -31,11 +42,11 @@ class ProfileViewModel : ViewModel() {
 			try {
 				_state.value = _state.value.copy(isLoading = true)
 
-				val user = SupabaseClient.client.auth.currentSessionOrNull()?.user
+				val user = userRepository.getCurrentUser()
 
 				_state.value = _state.value.copy(
 					email = user?.email ?: "",
-					username = user?.userMetadata?.get("username")?.toString() ?: "",
+					username = user?.username ?: "", // depende de tu modelo UserModel
 					isLoading = false
 				)
 
@@ -48,33 +59,29 @@ class ProfileViewModel : ViewModel() {
 		}
 	}
 
+
 	fun updateProfile(newEmail: String, newUsername: String) {
 		viewModelScope.launch {
 			try {
 				_state.value = _state.value.copy(isLoading = true)
 
-				val currentUser = SupabaseClient.client.auth.currentSessionOrNull()?.user
+				val currentUser = userRepository.getCurrentUser()
+				if (currentUser != null) {
+					val updatedUser = currentUser.copy(
+						email = newEmail,
+						username = newUsername
+					)
 
-				SupabaseClient.client.auth.updateUser {
-					if (currentUser?.email != newEmail) {
-						this.email = newEmail
-					}
-					data = buildJsonObject {
-						put("username", newUsername)
-					}
+					val result = userRepository.updateUser(updatedUser)
+
+					_state.value = _state.value.copy(
+						email = result?.email ?: newEmail,
+						username = result?.username ?: newUsername,
+						isLoading = false
+					)
+				} else {
+					throw Exception("No current user loaded")
 				}
-
-				SupabaseClient.client.auth.refreshCurrentSession()
-
-				val updatedUser = SupabaseClient.client.auth.currentSessionOrNull()?.user
-
-				_state.value = _state.value.copy(
-					email = updatedUser?.email ?: newEmail,
-					username = updatedUser?.userMetadata?.get("username")?.toString()
-						?: newUsername,
-					isLoading = false
-				)
-
 			} catch (e: Exception) {
 				_state.value = _state.value.copy(
 					error = e.message ?: "Unknown error",

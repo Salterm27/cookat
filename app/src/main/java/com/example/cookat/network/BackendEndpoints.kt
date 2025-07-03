@@ -2,10 +2,13 @@ package com.example.cookat.network
 
 import com.example.cookat.models.dbModels.recipes.RecipeModel
 import com.example.cookat.models.dbModels.recipes.RecipesWrapper
+import com.example.cookat.models.dbModels.users.UserModel
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.HEAD
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 interface BackendEndpoints {
 	@HEAD("ping")
@@ -16,4 +19,13 @@ interface BackendEndpoints {
 
 	@POST("recipes")
 	suspend fun createRecipe(@Body recipe: RecipeModel): RecipeModel
+
+	@GET("users")
+	suspend fun getCurrentUser(): UserModel
+
+	@PUT("users")
+	suspend fun updateUser(@Body user: UserModel): UserModel
+
+	@DELETE("users")
+	suspend fun deleteUser(): Unit
 }

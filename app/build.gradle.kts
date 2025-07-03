@@ -94,6 +94,7 @@ dependencies {
 	implementation(libs.room.ktx)
 	ksp(libs.room.compiler)
 
+	implementation(libs.supabase.storage)
 
 	testImplementation(libs.junit)
 	androidTestImplementation(libs.androidx.junit)
