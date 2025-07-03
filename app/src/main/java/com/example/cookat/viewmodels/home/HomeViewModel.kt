@@ -23,12 +23,30 @@ class HomeViewModel(context: Context) : ViewModel() {
 
 	fun loadRecipes() {
 		viewModelScope.launch {
+			// Show loading while loading local
 			uiState = uiState.copy(isLoading = true)
-			val result = repository.getRecipes()
-			uiState = if (result.isSuccess) {
-				uiState.copy(isLoading = false, recipes = result.getOrNull() ?: emptyList())
-			} else {
-				uiState.copy(isLoading = false, errorMessage = result.exceptionOrNull()?.message)
+
+			// Load local recipes first
+			val localRecipes = repository.getLocalRecipes()
+			uiState = uiState.copy(
+				isLoading = false,
+				recipes = localRecipes
+			)
+
+			// Then refresh from backend sequentially
+			try {
+				repository.refreshRecipesFromBackend()
+
+				// Load local again to get updated data
+				val updatedRecipes = repository.getLocalRecipes()
+				uiState = uiState.copy(
+					recipes = updatedRecipes
+				)
+
+			} catch (e: Exception) {
+				uiState = uiState.copy(
+					errorMessage = e.message
+				)
 			}
 		}
 	}

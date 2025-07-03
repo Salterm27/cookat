@@ -6,36 +6,23 @@ import com.example.cookat.data.local.mapper.toEntity
 import com.example.cookat.data.local.mapper.toModel
 import com.example.cookat.models.dbModels.recipes.RecipeModel
 import com.example.cookat.network.BackendClient
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class HomeRepository(context: Context) {
 
 	private val api = BackendClient.create(context)
 	private val dao = RecipeDB.getDatabase(context).recipeDao()
 
-	suspend fun getRecipes(): Result<List<RecipeModel>> {
-		return withContext(Dispatchers.IO) {
-			try {
-				// ⃣ Try local DB first
-				val localRecipes = dao.getRecipes().map { it.toModel() }
-				if (localRecipes.isNotEmpty()) {
-					return@withContext Result.success(localRecipes)
-				}
+	suspend fun getLocalRecipes(): List<RecipeModel> {
+		return dao.getRecipes().map { it.toModel() }
+	}
 
-				// If empty, fetch from backend
-				val response = api.getRecipes() // RecipesResponse
-				val remoteRecipes = response.results
+	suspend fun refreshRecipesFromBackend() {
+		val response = api.getRecipes() // returns RecipesWrapper
+		val remoteRecipes = response.results
 
-				// 3️⃣ Save to local DB
-				dao.clearRecipes()
-				dao.insertAll(remoteRecipes.map { it.toEntity() })
+		// Optional: sync favourites if needed
 
-				Result.success(remoteRecipes)
-
-			} catch (e: Exception) {
-				Result.failure(e)
-			}
-		}
+		dao.clearRecipes()
+		dao.insertAll(remoteRecipes.map { it.toEntity() })
 	}
 }
