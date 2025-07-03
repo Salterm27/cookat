@@ -5,7 +5,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.example.cookat.viewmodels.profile.UserProfileState
 
 @Composable
@@ -14,8 +13,8 @@ fun MyProfile(
 	onUpdate: (String, String) -> Unit,
 	onNavigateTo: () -> Unit
 ) {
-	var email by remember { mutableStateOf(uiState.email) }
-	var username by remember { mutableStateOf(uiState.username) }
+	var email by remember(uiState.email) { mutableStateOf(uiState.email) }
+	var username by remember(uiState.username) { mutableStateOf(uiState.username) }
 
 	Scaffold { padding ->
 		Column(
@@ -56,3 +55,4 @@ fun MyProfile(
 		}
 	}
 }
+

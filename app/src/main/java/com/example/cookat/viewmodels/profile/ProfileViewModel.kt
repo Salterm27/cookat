@@ -1,23 +1,12 @@
 package com.example.cookat.viewmodels.profile
 
-import android.content.Context
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.cookat.data.local.session.SessionManager
-import com.example.cookat.data.remote.SupabaseClient
-import com.example.cookat.models.dbModels.users.UserModelFactory
-import com.example.cookat.network.BackendClient
 import com.example.cookat.repository.UserRepository
-import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.buildJsonObject
-import org.slf4j.MDC.put
+
 
 data class UserProfileState(
 	val email: String = "",
