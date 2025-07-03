@@ -6,6 +6,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.HEAD
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface BackendEndpoints {
 	@HEAD("ping")
@@ -16,4 +17,8 @@ interface BackendEndpoints {
 
 	@POST("recipes")
 	suspend fun createRecipe(@Body recipe: RecipeModel): RecipeModel
+
+	@GET("recipes/{id}")
+	suspend fun getRecipeById(@Path("id") id: String): RecipeModel
+
 }

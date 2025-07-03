@@ -118,7 +118,7 @@ fun RecipeCard(
 						Spacer(modifier = Modifier.weight(1f))
 
 						val formatter =
-							remember { SimpleDateFormat("dd MMM yyyy", Locale.getDefault()) }
+							remember { SimpleDateFormat("dd/MM/yy", Locale.getDefault()) }
 						Text(
 							text = "Updated: ${formatter.format(recipe.updatedAt)}",
 							style = MaterialTheme.typography.bodySmall,
