@@ -121,6 +121,7 @@ fun RecipeDetails(
 				LazyColumn(
 					contentPadding = padding
 				) {
+					// Recipe header image, author, portions
 					item {
 						Image(
 							painter = painterResource(R.drawable.ic_recipe_placeholder),
@@ -130,11 +131,41 @@ fun RecipeDetails(
 								.fillMaxWidth()
 								.height(200.dp)
 						)
-						Text("Por ${recipe.username}", modifier = Modifier.padding(16.dp))
-						Text("Porciones: ${recipe.portions}", modifier = Modifier.padding(16.dp))
-						Text("Ingredientes", modifier = Modifier.padding(16.dp))
+						Text(
+							"Por ${recipe.username}",
+							style = MaterialTheme.typography.labelSmall,
+							modifier = Modifier.padding(horizontal = 16.dp)
+						)
+						Text(
+							"Para ${recipe.portions} porciones",
+							style = MaterialTheme.typography.titleMedium,
+							modifier = Modifier.padding(16.dp)
+						)
 					}
-					//TODO: Add items for your ingredients + steps...
+
+					// Ingredients section title
+					item {
+						Text(
+							"Ingredientes",
+							style = MaterialTheme.typography.headlineSmall,
+							modifier = Modifier.padding(16.dp)
+						)
+					}
+
+					// TODO add the Ingredients list: use items()
+
+
+					// Steps section title
+					item {
+						Text(
+							"Pasos",
+							style = MaterialTheme.typography.headlineSmall,
+							modifier = Modifier.padding(16.dp)
+						)
+					}
+
+					// TODO add here the steps list
+
 				}
 			}
 		}
