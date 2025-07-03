@@ -87,7 +87,7 @@ fun RecipeCard(
 							Icon(
 								imageVector = if (starFilled) Icons.Filled.Star else Icons.Filled.StarBorder,
 								contentDescription = null,
-								tint = if (starFilled) Color(0xFFFFD700) else Color.Gray,
+								tint = if (starFilled) Color(0xFF000000) else Color.Gray,
 								modifier = Modifier.size(18.dp)
 							)
 						}

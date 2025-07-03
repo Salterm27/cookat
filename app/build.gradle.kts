@@ -71,6 +71,8 @@ dependencies {
 	implementation(libs.androidx.ui.graphics)
 	implementation(libs.androidx.ui.tooling.preview)
 	implementation(libs.androidx.material3)
+	implementation(libs.androidx.material.icons.extended)
+
 	implementation(libs.navigation)
 	implementation(libs.lifecycle)
 	implementation(libs.fragment)
@@ -79,6 +81,8 @@ dependencies {
 	implementation(libs.supabasePostgrest)
 	implementation(libs.supabaseAuth)
 	implementation(libs.ktorClientAndroid)
+	implementation(libs.room.runtime)
+	implementation(libs.room.ktx)
 
 
 	testImplementation(libs.junit)

@@ -8,12 +8,13 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.9.1"
 activityCompose = "1.10.1"
 composeBom = "2025.06.01"
-navigation = "2.9.0"
+navigation = "2.9.1"
 lifecycle = "2.9.1"
 fragment = "1.8.8"
-navigationFragment = "2.9.0"
+navigationFragment = "2.9.1"
 material3New = "1.3.2"
 supabase = "3.1.2"
+room = "2.6.1"
 ktor = "3.1.1"
 
 
@@ -32,6 +33,7 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 lifecycle = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
@@ -43,6 +45,11 @@ supabaseBom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "su
 supabasePostgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supabase" }
 supabaseAuth = { module = "io.github.jan-tennert.supabase:auth-kt", version.ref = "supabase" }
 ktorClientAndroid = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
