@@ -25,12 +25,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.cookat.data.local.session.SessionManager
+import com.example.cookat.network.BackendClient
 import com.example.cookat.repository.AuthRepository
+import com.example.cookat.repository.UserRepository
 import com.example.cookat.viewmodels.profile.RegisterViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,9 +43,15 @@ fun RegisterScreen(
 	onNavigateTo: () -> Unit,
 	onNavigateBack: () -> Unit
 ) {
+	val context = LocalContext.current
+
 	val viewModel: RegisterViewModel = viewModel {
 		RegisterViewModel(
-			authRepository = AuthRepository(),
+			authRepository = AuthRepository(SessionManager(context)),
+			userRepository = UserRepository(
+				backendApi = BackendClient.create(context),
+				sessionManager = SessionManager(context)
+			)
 		)
 	}
 

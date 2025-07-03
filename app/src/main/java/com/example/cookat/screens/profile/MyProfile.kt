@@ -1,50 +1,85 @@
 package com.example.cookat.screens.profile
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.cookat.viewmodels.profile.UserProfileState
+import androidx.compose.ui.unit.dp
+import com.example.cookat.viewmodels.profile.ProfileViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyProfile(
-	uiState: UserProfileState,
-	onUpdate: (String, String) -> Unit,
+	viewModel: ProfileViewModel,
+	onNavigateBack: () -> Unit,
 	onNavigateTo: () -> Unit
 ) {
-	var email by remember(uiState.email) { mutableStateOf(uiState.email) }
-	var username by remember(uiState.username) { mutableStateOf(uiState.username) }
+	val uiState by viewModel.uiState.collectAsState()
 
-	Scaffold { padding ->
+	Scaffold(
+		topBar = {
+			TopAppBar(
+				title = { Text("Profile") },
+				navigationIcon = {
+					IconButton(onClick = onNavigateBack) {
+						Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+					}
+				}
+			)
+		}
+	) { padding ->
 		Column(
 			modifier = Modifier
 				.padding(padding)
-				.fillMaxSize(),
+				.fillMaxSize()
+				.padding(16.dp),
 			verticalArrangement = Arrangement.Center,
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
-			Text(text = "Profile page")
-
 			OutlinedTextField(
-				value = email,
-				onValueChange = { email = it },
+				value = uiState.editedEmail,
+				onValueChange = viewModel::onEmailChange,
 				label = { Text("Email") }
 			)
 
+			Spacer(modifier = Modifier.height(12.dp))
+
 			OutlinedTextField(
-				value = username,
-				onValueChange = { username = it },
+				value = uiState.editedUsername,
+				onValueChange = viewModel::onUsernameChange,
 				label = { Text("Username") }
 			)
+
+			Spacer(modifier = Modifier.height(24.dp))
 
 			if (uiState.isLoading) {
 				CircularProgressIndicator()
 			} else {
-				Button(onClick = {
-					onUpdate(email, username)
-					onNavigateTo()
-				}) {
+				Button(
+					onClick = viewModel::showDialog,
+					enabled = uiState.isChanged
+				) {
 					Text("Update Profile")
 				}
 			}
@@ -54,5 +89,22 @@ fun MyProfile(
 			}
 		}
 	}
-}
 
+	if (uiState.showConfirmationDialog) {
+		AlertDialog(
+			onDismissRequest = viewModel::dismissDialog,
+			title = { Text("Confirm Changes") },
+			text = { Text("Are you sure you want to update your profile?") },
+			confirmButton = {
+				TextButton(onClick = { viewModel.confirmUpdate(onNavigateTo) }) {
+					Text("Yes")
+				}
+			},
+			dismissButton = {
+				TextButton(onClick = viewModel::dismissDialog) {
+					Text("Cancel")
+				}
+			}
+		)
+	}
+}

@@ -61,7 +61,7 @@ fun AppNavigation() {
 		composable("login") {
 			LogInScreen(
 				onNavigateToRegister = { navController.navigate("register") },
-				onLoginSuccess = { navController.navigate("auth") },
+				onLoginSuccess = { navController.navigate("home") },
 				onNavigateToPassword = { navController.navigate("password") }
 			)
 		}
@@ -72,7 +72,7 @@ fun AppNavigation() {
 				},
 				onNavigateBack = { navController.navigate("login") })
 		}
-		composable("auth") {
+		composable("home") {
 			HomeScreen(navController)
 		}
 		composable("password") {
@@ -83,17 +83,13 @@ fun AppNavigation() {
 		}
 		composable("profile") {
 			ProfileScreen(
-				onNavigateTo = { navController.navigate("auth") }
+				onNavigateTo = { navController.navigate("home") },
+				onNavigateBack = { navController.navigate("home") }
 			)
 		}
-		/*
-		composable("profile") {
-			MyProfile(onNavigateTo = { navController.navigate("auth") })
-		}
 
-		 */
 		composable("newRecipe") {
-			NewRecipe(onNavigateTo = { navController.navigate("auth") })
+			NewRecipe(onNavigateTo = { navController.navigate("home") })
 		}
 		composable(
 			"recipe/{id}",
@@ -103,7 +99,7 @@ fun AppNavigation() {
 			RecipeDetails(recipeId = recipeId, navController = navController)
 		}
 		composable("settings") {
-			MySettings(onNavigateTo = { navController.navigate("auth") })
+			MySettings(onNavigateTo = { navController.navigate("home") })
 		}
 	}
 }

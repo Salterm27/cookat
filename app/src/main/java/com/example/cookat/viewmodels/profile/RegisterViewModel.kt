@@ -4,12 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cookat.models.uiStates.RegisterUiState
 import com.example.cookat.repository.AuthRepository
+import com.example.cookat.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
-	private val authRepository: AuthRepository
+	private val authRepository: AuthRepository,
+	private val userRepository: UserRepository
 ) : ViewModel() {
 
 	private val _uiState = MutableStateFlow(RegisterUiState())
@@ -41,7 +43,8 @@ class RegisterViewModel(
 
 			val result = authRepository.signUp(
 				email = _uiState.value.email,
-				password = _uiState.value.password
+				password = _uiState.value.password,
+				userRepository = userRepository
 			)
 
 			if (result.isSuccess) {
