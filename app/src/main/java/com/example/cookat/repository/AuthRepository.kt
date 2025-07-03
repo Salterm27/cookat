@@ -50,4 +50,13 @@ class AuthRepository(private val sessionManager: SessionManager) {
 	fun isLoggedIn(): Boolean {
 		return auth.currentSessionOrNull() != null
 	}
+
+	fun getUserId(): String? {
+		return auth.currentUserOrNull()?.id
+	}
+
+	fun getUserEmail(): String? {
+		return auth.currentUserOrNull()?.email
+	}
+
 }

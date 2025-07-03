@@ -28,6 +28,12 @@ class UserRepository(
 		return backendApi.getCurrentUser()
 	}
 
+	suspend fun createUser(id: String, email: String): UserModel? {
+		val token = getToken() ?: return null
+		val user = UserModel(id = id, email = email, username = "") // podés agregar más
+		return backendApi.createUser(user)
+	}
+
 	suspend fun updateUser(user: UserModel): UserModel? {
 		val token = getToken() ?: return null
 		return backendApi.updateUser(user)
