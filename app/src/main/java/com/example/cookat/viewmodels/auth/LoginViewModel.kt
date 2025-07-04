@@ -36,13 +36,10 @@ class LoginViewModel(
 			} else {
 				val rawError = result.exceptionOrNull()?.message ?: ""
 				val friendlyMessage = when {
-					rawError.contains("invalid_credentials", ignoreCase = true) -> {
+					rawError.contains("invalid_credentials", ignoreCase = true) ->
 						"El email o la contraseña son incorrectos."
-					}
 
-					else -> {
-						"Ocurrió un error inesperado. Intenta de nuevo."
-					}
+					else -> "Ocurrió un error inesperado. Intenta de nuevo."
 				}
 
 				uiState = uiState.copy(

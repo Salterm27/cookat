@@ -1,158 +1,147 @@
 package com.example.cookat.screens.auth
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.cookat.data.local.session.SessionManager
-import com.example.cookat.repository.AuthRepository
-import com.example.cookat.ui.theme.Error
+import com.example.cookat.R
 import com.example.cookat.viewmodels.auth.LoginViewModel
 
 @Composable
 fun LogInScreen(
-	onLoginSuccess: () -> Unit,
+	viewModel: LoginViewModel,
 	onNavigateToRegister: () -> Unit,
-	onNavigateToPassword: () -> Unit,
+	onLoginSuccess: () -> Unit,
+	onNavigateToPassword: () -> Unit
 ) {
-	val context = LocalContext.current
-	val sessionManager = remember { SessionManager(context) }
-
-	val viewModel: LoginViewModel = viewModel(factory = object : ViewModelProvider.Factory {
-		override fun <T : ViewModel> create(modelClass: Class<T>): T {
-			val repository = AuthRepository(sessionManager)
-			if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-				@Suppress("UNCHECKED_CAST")
-				return LoginViewModel(repository) as T
-			}
-			throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
-		}
-	})
-
 	val state = viewModel.uiState
-	val focusManager = LocalFocusManager.current
 
-	val emailFocusRequester = remember { FocusRequester() }
-	val passwordFocusRequester = remember { FocusRequester() }
-
-	Scaffold { padding ->
-		Column(
-			modifier = Modifier
-				.fillMaxSize()
-				.padding(padding)
-				.padding(horizontal = 24.dp),
-			verticalArrangement = Arrangement.Center
-		) {
-			TextField(
-				value = state.email,
-				onValueChange = viewModel::onEmailChange,
-				label = { Text("Email") },
-				modifier = Modifier
-					.fillMaxWidth()
-					.focusRequester(emailFocusRequester),
-				keyboardOptions = KeyboardOptions.Default.copy(
-					imeAction = ImeAction.Next,
-					keyboardType = KeyboardType.Email
-				),
-				keyboardActions = KeyboardActions(
-					onNext = { passwordFocusRequester.requestFocus() }
-				)
+	Column(
+		modifier = Modifier
+			.fillMaxSize()
+			.padding(32.dp),
+		horizontalAlignment = Alignment.CenterHorizontally
+	) {
+		Text(
+			text = "Cookat",
+			style = MaterialTheme.typography.displayLarge.copy(
+				color = MaterialTheme.colorScheme.primary
 			)
+		)
 
-			Spacer(modifier = Modifier.height(12.dp))
+		Spacer(Modifier.height(16.dp))
 
-			TextField(
-				value = state.password,
-				onValueChange = viewModel::onPasswordChange,
-				label = { Text("Contraseña") },
-				visualTransformation = PasswordVisualTransformation(),
-				modifier = Modifier
-					.fillMaxWidth()
-					.focusRequester(passwordFocusRequester),
-				keyboardOptions = KeyboardOptions.Default.copy(
-					imeAction = ImeAction.Done,
-					keyboardType = KeyboardType.Password
-				),
-				keyboardActions = KeyboardActions(
-					onDone = {
-						focusManager.clearFocus()
-						viewModel.login(onLoginSuccess)
+		Image(
+			painter = painterResource(R.drawable.cookat_logo),
+			contentDescription = "Cookat Logo",
+			modifier = Modifier.size(150.dp)
+		)
+
+		Spacer(Modifier.height(32.dp))
+
+		OutlinedTextField(
+			value = state.email,
+			onValueChange = { viewModel.onEmailChange(it) },
+			label = { Text("User Account") },
+			placeholder = { Text("Input") },
+			trailingIcon = {
+				if (state.email.isNotEmpty()) {
+					IconButton(onClick = { viewModel.onEmailChange("") }) {
+						Icon(Icons.Default.Close, contentDescription = "Clear Email")
 					}
-				)
-			)
-
-			Spacer(modifier = Modifier.height(8.dp))
-
-			Text(
-				text = "Olvidaste la contraseña?",
-				color = MaterialTheme.colorScheme.primary,
-				style = MaterialTheme.typography.bodySmall,
-				modifier = Modifier
-					.align(Alignment.End)
-					.clickable(onClick = onNavigateToPassword)
-					.padding(4.dp)
-			)
-
-			Spacer(modifier = Modifier.height(24.dp))
-
-			if (state.isLoading) {
-				CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-			} else {
-				Button(
-					onClick = { viewModel.login(onLoginSuccess) },
-					modifier = Modifier
-						.fillMaxWidth()
-						.height(48.dp)
-				) {
-					Text("Entrar a la app")
 				}
+			},
+			singleLine = true,
+			shape = RoundedCornerShape(12.dp),
+			modifier = Modifier.fillMaxWidth(),
+			colors = OutlinedTextFieldDefaults.colors(
+				focusedBorderColor = MaterialTheme.colorScheme.primary,
+				unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+				cursorColor = MaterialTheme.colorScheme.primary
+			),
+			keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+		)
 
-				state.errorMessage?.let {
-					Spacer(modifier = Modifier.height(8.dp))
-					Text(
-						text = it,
-						color = Error,
-						style = MaterialTheme.typography.bodySmall
-					)
+		Spacer(Modifier.height(16.dp))
+
+		OutlinedTextField(
+			value = state.password,
+			onValueChange = { viewModel.onPasswordChange(it) },
+			label = { Text("Password") },
+			placeholder = { Text("Input") },
+			trailingIcon = {
+				if (state.password.isNotEmpty()) {
+					IconButton(onClick = { viewModel.onPasswordChange("") }) {
+						Icon(Icons.Default.Close, contentDescription = "Clear Password")
+					}
 				}
+			},
+			singleLine = true,
+			shape = RoundedCornerShape(12.dp),
+			modifier = Modifier.fillMaxWidth(),
+			colors = OutlinedTextFieldDefaults.colors(
+				focusedBorderColor = MaterialTheme.colorScheme.primary,
+				unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+				cursorColor = MaterialTheme.colorScheme.primary
+			),
+			keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+			visualTransformation = PasswordVisualTransformation() // ✅ Mask the password!
+		)
 
-				Spacer(modifier = Modifier.height(16.dp))
+		Spacer(Modifier.height(8.dp))
 
-				TextButton(
-					onClick = onNavigateToRegister,
-					modifier = Modifier.align(Alignment.CenterHorizontally)
-				) {
-					Text("No tenes una cuenta? Registrate!")
-				}
+		Row(
+			modifier = Modifier.fillMaxWidth(),
+			horizontalArrangement = Arrangement.SpaceBetween
+		) {
+			TextButton(onClick = onNavigateToPassword) {
+				Text("Olvide mi contraseña", color = MaterialTheme.colorScheme.primary)
 			}
+			TextButton(onClick = onNavigateToRegister) {
+				Text("No tenes una cuenta? Registrate!", color = MaterialTheme.colorScheme.primary)
+			}
+		}
+
+		Spacer(Modifier.height(32.dp))
+
+		Button(
+			onClick = { viewModel.login(onLoginSuccess) },
+			shape = RoundedCornerShape(50),
+			modifier = Modifier.align(Alignment.End),
+			colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+		) {
+			Text("Entrar a la App", color = MaterialTheme.colorScheme.onPrimary)
+		}
+
+		state.errorMessage?.let {
+			Spacer(Modifier.height(16.dp))
+			Text(it, color = MaterialTheme.colorScheme.error)
 		}
 	}
 }

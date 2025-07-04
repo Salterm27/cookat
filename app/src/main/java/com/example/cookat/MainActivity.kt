@@ -5,13 +5,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.cookat.data.local.session.SessionManager
 import com.example.cookat.models.dbModels.users.ProfileScreen
 import com.example.cookat.network.BackendClient
+import com.example.cookat.repository.AuthRepository
 import com.example.cookat.screens.auth.LogInScreen
 import com.example.cookat.screens.auth.PasswordScreen
 import com.example.cookat.screens.auth.RegisterScreen
@@ -21,6 +27,7 @@ import com.example.cookat.screens.recipes.NewRecipe
 import com.example.cookat.screens.recipes.RecipeDetails
 import com.example.cookat.screens.settings.MySettings
 import com.example.cookat.ui.theme.CookatTheme
+import com.example.cookat.viewmodels.auth.LoginViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -45,7 +52,6 @@ class MainActivity : ComponentActivity() {
 		GlobalScope.launch {
 			try {
 				api.pingBackend()
-				// Fire-and-forget, we don't care about the result
 			} catch (e: Exception) {
 				e.printStackTrace()
 			}
@@ -56,31 +62,48 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppNavigation() {
 	val navController = rememberNavController()
+	val context = LocalContext.current
 
 	NavHost(navController = navController, startDestination = "login") {
 		composable("login") {
+			val viewModel: LoginViewModel = viewModel(
+				factory = object : ViewModelProvider.Factory {
+					override fun <T : ViewModel> create(modelClass: Class<T>): T {
+						val sessionManager = SessionManager(context) // ✅ 1. create it!
+						val repo = AuthRepository(sessionManager)    // ✅ 2. pass it in
+						return LoginViewModel(repo) as T
+					}
+				}
+			)
+
 			LogInScreen(
+				viewModel = viewModel,
 				onNavigateToRegister = { navController.navigate("register") },
 				onLoginSuccess = { navController.navigate("home") },
 				onNavigateToPassword = { navController.navigate("password") }
 			)
 		}
+
+		// ✅ No changes needed for the other destinations:
 		composable("register") {
 			RegisterScreen(
-				onNavigateTo = {
-					navController.navigate("login")
-				},
-				onNavigateBack = { navController.navigate("login") })
+				onNavigateTo = { navController.navigate("login") },
+				onNavigateBack = { navController.navigate("login") }
+			)
 		}
+
 		composable("home") {
 			HomeScreen(navController)
 		}
+
 		composable("password") {
 			PasswordScreen(onNavigateTo = { navController.navigate("validatePassword") })
 		}
+
 		composable("validatePassword") {
 			ValidatePasswordScreen(onNavigateTo = { navController.navigate("login") })
 		}
+
 		composable("profile") {
 			ProfileScreen(
 				onNavigateTo = { navController.navigate("home") },
@@ -91,6 +114,7 @@ fun AppNavigation() {
 		composable("newRecipe") {
 			NewRecipe(onNavigateTo = { navController.navigate("home") })
 		}
+
 		composable(
 			"recipe/{id}",
 			arguments = listOf(navArgument("id") { type = NavType.StringType })
@@ -98,6 +122,7 @@ fun AppNavigation() {
 			val recipeId = backStackEntry.arguments?.getString("id") ?: ""
 			RecipeDetails(recipeId = recipeId, navController = navController)
 		}
+
 		composable("settings") {
 			MySettings(onNavigateTo = { navController.navigate("home") })
 		}
