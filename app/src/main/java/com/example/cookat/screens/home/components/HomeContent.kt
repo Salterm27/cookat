@@ -20,11 +20,19 @@ fun HomeContent(
 ) {
 	val listState = rememberLazyListState()
 
+	// ✅ Apply the filter
+	val displayedRecipes = when (state.currentFilter) {
+		com.example.cookat.models.uiStates.RecipeFilter.ALL -> state.recipes
+		com.example.cookat.models.uiStates.RecipeFilter.FAVOURITES -> state.recipes.filter { it.isFavourite }
+		com.example.cookat.models.uiStates.RecipeFilter.MINE -> state.recipes // Replace with your filter
+		com.example.cookat.models.uiStates.RecipeFilter.SEARCH -> state.recipes // Replace with your search filter
+	}
+
 	LazyColumn(
 		state = listState,
 		modifier = modifier
 	) {
-		items(state.recipes) { recipe ->
+		items(displayedRecipes) { recipe ->
 			RecipeCard(
 				recipe = recipe,
 				onClick = {
@@ -42,8 +50,7 @@ fun HomeContent(
 			val layoutInfo = listState.layoutInfo
 			layoutInfo.visibleItemsInfo.lastOrNull()?.index to layoutInfo.totalItemsCount
 		}.collect { (lastVisible, totalItems) ->
-			val safeLastVisible = lastVisible ?: 0
-			onLoadMore(safeLastVisible, totalItems)
+			onLoadMore(lastVisible ?: 0, totalItems)
 		}
 	}
 }

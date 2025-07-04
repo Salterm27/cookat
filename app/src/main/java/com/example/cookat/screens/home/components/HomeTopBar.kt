@@ -10,11 +10,10 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,14 +24,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.cookat.models.uiStates.RecipeFilter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun HomeTopBar(
 	drawerState: DrawerState,
-	scope: CoroutineScope
+	scope: CoroutineScope,
+	currentFilter: RecipeFilter,
+	onFilterChange: (RecipeFilter) -> Unit
 ) {
 	Surface(
 		modifier = Modifier
@@ -81,31 +84,20 @@ fun HomeTopBar(
 				.clip(RoundedCornerShape(12.dp))
 				.background(MaterialTheme.colorScheme.surfaceVariant)
 
-			IconButton(onClick = { /* TODO: Filter 1 */ }, modifier = iconModifier) {
+			IconButton(
+				onClick = {
+					if (currentFilter == RecipeFilter.FAVOURITES) {
+						onFilterChange(RecipeFilter.ALL)
+					} else {
+						onFilterChange(RecipeFilter.FAVOURITES)
+					}
+				},
+				modifier = iconModifier
+			) {
 				Icon(
-					Icons.Filled.StarBorder,
-					contentDescription = "Filter 1",
-					tint = MaterialTheme.colorScheme.primary
-				)
-			}
-
-			Spacer(modifier = Modifier.width(4.dp))
-
-			IconButton(onClick = { /* TODO: Favorites */ }, modifier = iconModifier) {
-				Icon(
-					Icons.Filled.FavoriteBorder,
-					contentDescription = "Favorites",
-					tint = MaterialTheme.colorScheme.primary
-				)
-			}
-
-			Spacer(modifier = Modifier.width(4.dp))
-
-			IconButton(onClick = { /* TODO: Downloads */ }, modifier = iconModifier) {
-				Icon(
-					Icons.Filled.Download,
-					contentDescription = "Downloads",
-					tint = MaterialTheme.colorScheme.primary
+					imageVector = if (currentFilter == RecipeFilter.FAVOURITES) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+					contentDescription = "Filter favourites",
+					tint = if (currentFilter == RecipeFilter.FAVOURITES) Color.Red else MaterialTheme.colorScheme.primary
 				)
 			}
 		}

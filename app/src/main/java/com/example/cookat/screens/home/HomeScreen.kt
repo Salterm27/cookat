@@ -46,7 +46,9 @@ fun HomeScreen(navController: NavController) {
 			topBar = {
 				HomeTopBar(
 					drawerState = drawerState,
-					scope = scope
+					scope = scope,
+					currentFilter = state.currentFilter,
+					onFilterChange = { filter -> viewModel.setFilter(filter) }
 				)
 			}
 		) { padding ->

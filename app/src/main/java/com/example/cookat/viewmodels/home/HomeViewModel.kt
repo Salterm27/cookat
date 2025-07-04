@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cookat.models.uiStates.HomeUiState
+import com.example.cookat.models.uiStates.RecipeFilter
 import com.example.cookat.repository.HomeRepository
 import kotlinx.coroutines.launch
 
@@ -65,6 +66,11 @@ class HomeViewModel(context: Context) : ViewModel() {
 	fun toggleFavourite(recipeId: String, newState: Boolean) {
 		viewModelScope.launch {
 			repository.toggleFavourite(recipeId, newState)
+			// Local Room Flow will emit updated recipes automatically
 		}
+	}
+
+	fun setFilter(filter: RecipeFilter) {
+		uiState = uiState.copy(currentFilter = filter)
 	}
 }
