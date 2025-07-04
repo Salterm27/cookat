@@ -21,11 +21,17 @@ class HomeRepository(context: Context) {
 	}
 
 	suspend fun refreshRecipesFromBackend() {
-		val response = api.getRecipes()
+		val response = api.getRecipes(page = 1)
 		val remoteRecipes = response.results
 		dao.clearRecipes()
 		dao.insertAll(remoteRecipes.map { it.toEntity() })
 		syncFavourites()
+	}
+
+	suspend fun fetchRecipesPage(page: Int) {
+		val response = api.getRecipes(page)
+		val remoteRecipes = response.results
+		dao.insertAll(remoteRecipes.map { it.toEntity() })
 	}
 
 	suspend fun syncFavourites() {

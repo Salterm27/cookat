@@ -17,6 +17,9 @@ class HomeViewModel(context: Context) : ViewModel() {
 	var uiState by mutableStateOf(HomeUiState())
 		private set
 
+	private var currentPage = 1
+	private var isLoadingMore = false
+
 	init {
 		observeRecipes()
 		refreshRecipes()
@@ -33,18 +36,35 @@ class HomeViewModel(context: Context) : ViewModel() {
 	fun refreshRecipes() {
 		viewModelScope.launch {
 			uiState = uiState.copy(isLoading = true)
-			runCatching { repository.refreshRecipesFromBackend() }
-				.onFailure {
-					uiState = uiState.copy(errorMessage = it.message)
-				}
+			currentPage = 1
+			runCatching {
+				repository.refreshRecipesFromBackend()
+			}.onFailure {
+				uiState = uiState.copy(errorMessage = it.message)
+			}
 			uiState = uiState.copy(isLoading = false)
+		}
+	}
+
+	fun loadMoreIfNeeded(lastVisibleItemIndex: Int, totalItemsCount: Int) {
+		if (isLoadingMore) return
+
+		if (lastVisibleItemIndex >= totalItemsCount - 5) {
+			isLoadingMore = true
+			currentPage += 1
+
+			viewModelScope.launch {
+				runCatching {
+					repository.fetchRecipesPage(currentPage)
+				}
+				isLoadingMore = false
+			}
 		}
 	}
 
 	fun toggleFavourite(recipeId: String, newState: Boolean) {
 		viewModelScope.launch {
 			repository.toggleFavourite(recipeId, newState)
-			
 		}
 	}
 }

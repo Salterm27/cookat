@@ -56,6 +56,9 @@ fun HomeScreen(navController: NavController) {
 				navController = navController,
 				onToggleFavorite = { recipeId, newState ->
 					viewModel.toggleFavourite(recipeId, newState)
+				},
+				onLoadMore = { lastVisible, totalItems ->
+					viewModel.loadMoreIfNeeded(lastVisible, totalItems)
 				}
 			)
 		}

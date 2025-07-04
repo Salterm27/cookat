@@ -11,6 +11,7 @@ import retrofit2.http.HEAD
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface BackendEndpoints {
 
@@ -18,7 +19,9 @@ interface BackendEndpoints {
 	suspend fun pingBackend()
 
 	@GET("recipes")
-	suspend fun getRecipes(): RecipesWrapper
+	suspend fun getRecipes(
+		@Query("page") page: Int = 1
+	): RecipesWrapper
 
 	@GET("favourites")
 	suspend fun getFavourites(): List<String>
