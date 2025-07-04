@@ -1,6 +1,7 @@
 package com.example.cookat.models.uiStates
 
-data class LoginUiState(
+data class
+LoginUiState(
 	val email: String = "",
 	val password: String = "",
 	val isLoading: Boolean = false,

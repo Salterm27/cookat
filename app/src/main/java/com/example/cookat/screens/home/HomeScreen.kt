@@ -53,7 +53,10 @@ fun HomeScreen(navController: NavController) {
 			HomeContent(
 				modifier = Modifier.padding(padding),
 				state = state,
-				navController = navController
+				navController = navController,
+				onToggleFavorite = { recipeId, newState ->
+					viewModel.toggleFavourite(recipeId, newState)
+				}
 			)
 		}
 	}

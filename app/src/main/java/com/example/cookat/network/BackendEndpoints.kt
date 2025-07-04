@@ -13,14 +13,24 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface BackendEndpoints {
+
 	@HEAD("ping")
 	suspend fun pingBackend()
 
 	@GET("recipes")
 	suspend fun getRecipes(): RecipesWrapper
 
+	@GET("favourites")
+	suspend fun getFavourites(): List<String>
+
 	@POST("recipes")
 	suspend fun createRecipe(@Body recipe: RecipeModel): RecipeModel
+
+	@POST("favourites/{recipeId}")
+	suspend fun addFavourite(@Path("recipeId") recipeId: String)
+
+	@DELETE("favourites/{recipeId}")
+	suspend fun removeFavourite(@Path("recipeId") recipeId: String)
 
 	@GET("users")
 	suspend fun getCurrentUser(): UserModel
@@ -36,5 +46,4 @@ interface BackendEndpoints {
 
 	@GET("recipes/{id}")
 	suspend fun getRecipeById(@Path("id") id: String): RecipeDto
-
 }

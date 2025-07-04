@@ -19,7 +19,8 @@ import java.util.Locale
 fun HomeContent(
 	modifier: Modifier = Modifier,
 	state: HomeUiState,
-	navController: NavController
+	navController: NavController,
+	onToggleFavorite: (String, Boolean) -> Unit
 ) {
 	Column(
 		modifier = modifier
@@ -53,7 +54,7 @@ fun HomeContent(
 							navController.navigate("recipe/${recipeModel.id}")
 						},
 						onToggleFavorite = { isFav ->
-							println("Receta ${recipeModel.id} marcada como favorita: $isFav")
+							onToggleFavorite(recipeModel.id, isFav)
 						}
 					)
 				}
