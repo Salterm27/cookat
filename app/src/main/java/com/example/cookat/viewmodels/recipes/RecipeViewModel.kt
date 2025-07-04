@@ -1,11 +1,12 @@
 package com.example.cookat.viewmodels.recipes
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cookat.models.uiStates.RecipeUiState
 import com.example.cookat.repository.RecipeRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class RecipeViewModel(
@@ -13,45 +14,47 @@ class RecipeViewModel(
 	private val recipeId: String
 ) : ViewModel() {
 
-	private val _uiState = MutableStateFlow(RecipeUiState())
-	val uiState: StateFlow<RecipeUiState> = _uiState
-
-	// VISUAL-ONLY FAVORITE TOGGLE
-	private val _isFavorite = MutableStateFlow(false)
-	val isFavorite: StateFlow<Boolean> = _isFavorite
+	var uiState by mutableStateOf(RecipeUiState())
+		private set
 
 	init {
-		loadRecipe()
+		loadRecipe(recipeId)
 	}
 
-	private fun loadRecipe() {
+	fun loadRecipe(recipeId: String) {
 		viewModelScope.launch {
-			_uiState.value = _uiState.value.copy(isLoading = true)
+			uiState = uiState.copy(isLoading = true)
 
 			val result = repository.getRecipeById(recipeId)
-
-			_uiState.value = if (result.isSuccess) {
-				_uiState.value.copy(
-					isLoading = false,
-					recipe = result.getOrNull()
-				)
+			uiState = if (result.isSuccess) {
+				uiState.copy(isLoading = false, recipe = result.getOrNull())
 			} else {
-				_uiState.value.copy(
-					isLoading = false,
-					errorMessage = result.exceptionOrNull()?.message ?: "Unknown error"
-				)
+				uiState.copy(isLoading = false, errorMessage = result.exceptionOrNull()?.message)
 			}
 		}
 	}
 
 	fun toggleFavorite() {
 		viewModelScope.launch {
-			_isFavorite.value = !_isFavorite.value
+			val recipe = uiState.recipe ?: return@launch
+			val newState = !recipe.isFavourite
 
-			// ✅ TODO:
-			// - Wire this up to your backend: add/remove favorite.
-			// - Update your local DB if needed.
-			// - Rollback local change if API fails.
+			// Instantly update local DB
+			repository.updateFavouriteLocal(recipe.id, newState)
+
+			// Optimistically update UI
+			uiState = uiState.copy(recipe = recipe.copy(isFavourite = newState))
+
+			// Fire backend call (don’t block UI)
+			runCatching {
+				if (newState) {
+					repository.apiAddFavourite(recipe.id)
+				} else {
+					repository.apiRemoveFavourite(recipe.id)
+				}
+			}.onFailure {
+				// Log or handle retry
+			}
 		}
 	}
 }

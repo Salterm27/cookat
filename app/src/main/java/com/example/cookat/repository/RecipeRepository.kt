@@ -17,21 +17,37 @@ class RecipeRepository(context: Context) {
 	suspend fun getRecipeById(id: String): Result<RecipeModel> {
 		return withContext(Dispatchers.IO) {
 			try {
-				// Try local DB
 				val local = dao.getRecipeById(id)?.toModel()
-				if (local != null) {
-					return@withContext Result.success(local)
-				}
+				if (local != null) return@withContext Result.success(local)
 
-				// Otherwise fetch from backend
 				val remote = api.getRecipeById(id)
 				dao.insert(remote.toEntity())
-
 				Result.success(remote.toModel())
 
 			} catch (e: Exception) {
 				Result.failure(e)
 			}
+		}
+	}
+
+	//
+	suspend fun updateFavouriteLocal(recipeId: String, newState: Boolean) {
+		withContext(Dispatchers.IO) {
+			dao.updateFavourite(recipeId, newState)
+		}
+	}
+
+	//
+	suspend fun apiAddFavourite(recipeId: String) {
+		withContext(Dispatchers.IO) {
+			api.addFavourite(recipeId)
+		}
+	}
+
+	//
+	suspend fun apiRemoveFavourite(recipeId: String) {
+		withContext(Dispatchers.IO) {
+			api.removeFavourite(recipeId)
 		}
 	}
 }
