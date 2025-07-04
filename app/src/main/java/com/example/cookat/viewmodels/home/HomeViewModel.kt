@@ -73,4 +73,8 @@ class HomeViewModel(context: Context) : ViewModel() {
 	fun setFilter(filter: RecipeFilter) {
 		uiState = uiState.copy(currentFilter = filter)
 	}
+
+	fun setSearchQuery(query: String) {
+		uiState = uiState.copy(searchQuery = query)
+	}
 }

@@ -10,5 +10,6 @@ data class HomeUiState(
 	val isLoading: Boolean = false,
 	val recipes: List<RecipeModel> = emptyList(),
 	val errorMessage: String? = null,
-	val currentFilter: RecipeFilter = RecipeFilter.ALL
+	val currentFilter: RecipeFilter = RecipeFilter.ALL,
+	val searchQuery: String = ""
 )

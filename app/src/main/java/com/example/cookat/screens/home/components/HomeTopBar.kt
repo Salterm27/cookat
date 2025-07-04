@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.example.cookat.models.uiStates.RecipeFilter
 import kotlinx.coroutines.CoroutineScope
@@ -35,7 +36,9 @@ fun HomeTopBar(
 	drawerState: DrawerState,
 	scope: CoroutineScope,
 	currentFilter: RecipeFilter,
-	onFilterChange: (RecipeFilter) -> Unit
+	searchQuery: String,
+	onFilterChange: (RecipeFilter) -> Unit,
+	onSearchChange: (String) -> Unit
 ) {
 	Surface(
 		modifier = Modifier
@@ -56,25 +59,31 @@ fun HomeTopBar(
 
 			Spacer(modifier = Modifier.width(8.dp))
 
+			// ✅ Rounded search bar with BasicTextField
 			Surface(
 				modifier = Modifier.weight(1f),
 				shape = RoundedCornerShape(50),
 				color = MaterialTheme.colorScheme.surfaceVariant
 			) {
-				Row(
+				BasicTextField(
+					value = searchQuery,
+					onValueChange = { onSearchChange(it) },
+					singleLine = true,
+					textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface),
 					modifier = Modifier
-						.padding(horizontal = 16.dp, vertical = 8.dp)
-						.fillMaxWidth(),
-					verticalAlignment = Alignment.CenterVertically
-				) {
-					Text(
-						text = "Search",
-						style = MaterialTheme.typography.bodyMedium,
-						color = MaterialTheme.colorScheme.onSurfaceVariant,
-						modifier = Modifier.weight(1f)
-					)
-					Icon(Icons.Filled.Search, contentDescription = "Search")
-				}
+						.fillMaxWidth()
+						.padding(horizontal = 16.dp, vertical = 12.dp),
+					decorationBox = { innerTextField ->
+						if (searchQuery.isEmpty()) {
+							Text(
+								text = "Search recipes...",
+								style = MaterialTheme.typography.bodyMedium,
+								color = MaterialTheme.colorScheme.onSurfaceVariant
+							)
+						}
+						innerTextField()
+					}
+				)
 			}
 
 			Spacer(modifier = Modifier.width(8.dp))

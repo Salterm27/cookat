@@ -48,7 +48,9 @@ fun HomeScreen(navController: NavController) {
 					drawerState = drawerState,
 					scope = scope,
 					currentFilter = state.currentFilter,
-					onFilterChange = { filter -> viewModel.setFilter(filter) }
+					searchQuery = state.searchQuery,
+					onFilterChange = { filter -> viewModel.setFilter(filter) },
+					onSearchChange = { query -> viewModel.setSearchQuery(query) }
 				)
 			}
 		) { padding ->

@@ -20,12 +20,19 @@ fun HomeContent(
 ) {
 	val listState = rememberLazyListState()
 
-	// ✅ Apply the filter
-	val displayedRecipes = when (state.currentFilter) {
+	//
+	val baseFilteredRecipes = when (state.currentFilter) {
 		com.example.cookat.models.uiStates.RecipeFilter.ALL -> state.recipes
 		com.example.cookat.models.uiStates.RecipeFilter.FAVOURITES -> state.recipes.filter { it.isFavourite }
-		com.example.cookat.models.uiStates.RecipeFilter.MINE -> state.recipes // Replace with your filter
-		com.example.cookat.models.uiStates.RecipeFilter.SEARCH -> state.recipes // Replace with your search filter
+		com.example.cookat.models.uiStates.RecipeFilter.MINE -> state.recipes // Replace with your userID filter
+		com.example.cookat.models.uiStates.RecipeFilter.SEARCH -> state.recipes
+	}
+
+	//
+	val displayedRecipes = if (state.searchQuery.isNotBlank()) {
+		baseFilteredRecipes.filter { it.title.contains(state.searchQuery, ignoreCase = true) }
+	} else {
+		baseFilteredRecipes
 	}
 
 	LazyColumn(
@@ -44,6 +51,7 @@ fun HomeContent(
 			)
 		}
 	}
+
 
 	LaunchedEffect(listState) {
 		snapshotFlow {
