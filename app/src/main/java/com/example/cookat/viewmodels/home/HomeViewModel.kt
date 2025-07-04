@@ -18,42 +18,33 @@ class HomeViewModel(context: Context) : ViewModel() {
 		private set
 
 	init {
-		loadRecipes()
+		observeRecipes()
+		refreshRecipes()
 	}
 
-	fun loadRecipes() {
+	private fun observeRecipes() {
+		viewModelScope.launch {
+			repository.observeRecipes().collect { recipes ->
+				uiState = uiState.copy(recipes = recipes)
+			}
+		}
+	}
+
+	fun refreshRecipes() {
 		viewModelScope.launch {
 			uiState = uiState.copy(isLoading = true)
-
-			val localRecipes = repository.getLocalRecipes()
-			uiState = uiState.copy(isLoading = false, recipes = localRecipes)
-
-			try {
-				repository.refreshRecipesFromBackend()
-				val updatedRecipes = repository.getLocalRecipes()
-				uiState = uiState.copy(recipes = updatedRecipes)
-			} catch (e: Exception) {
-				uiState = uiState.copy(errorMessage = e.message)
-			}
+			runCatching { repository.refreshRecipesFromBackend() }
+				.onFailure {
+					uiState = uiState.copy(errorMessage = it.message)
+				}
+			uiState = uiState.copy(isLoading = false)
 		}
 	}
 
 	fun toggleFavourite(recipeId: String, newState: Boolean) {
 		viewModelScope.launch {
-			try {
-				repository.toggleFavourite(recipeId, newState)
-
-				
-				val updatedRecipes = uiState.recipes.map { recipe ->
-					if (recipe.id == recipeId) recipe.copy(isFavourite = newState)
-					else recipe
-				}
-
-				uiState = uiState.copy(recipes = updatedRecipes)
-
-			} catch (e: Exception) {
-				uiState = uiState.copy(errorMessage = e.message)
-			}
+			repository.toggleFavourite(recipeId, newState)
+			
 		}
 	}
 }

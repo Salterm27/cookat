@@ -8,26 +8,24 @@ import com.example.cookat.data.local.entities.RecipeEntity
 
 @Dao
 interface RecipeDAO {
+	@Query("SELECT * FROM recipes")
+	fun observeRecipes(): kotlinx.coroutines.flow.Flow<List<RecipeEntity>>
 
 	@Query("SELECT * FROM recipes")
 	suspend fun getRecipes(): List<RecipeEntity>
-
-	@Query("SELECT * FROM recipes WHERE isFavourite = 1")
-	suspend fun getFavouriteRecipes(): List<RecipeEntity>
 
 	@Query("SELECT * FROM recipes WHERE id = :id")
 	suspend fun getRecipeById(id: String): RecipeEntity?
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	suspend fun insertAll(recipes: List<RecipeEntity>)
+	suspend fun insert(recipe: RecipeEntity)
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	suspend fun insert(recipe: RecipeEntity)
+	suspend fun insertAll(recipes: List<RecipeEntity>)
 
 	@Query("UPDATE recipes SET isFavourite = :state WHERE id = :id")
 	suspend fun updateFavourite(id: String, state: Boolean)
 
 	@Query("DELETE FROM recipes")
 	suspend fun clearRecipes()
-
 }

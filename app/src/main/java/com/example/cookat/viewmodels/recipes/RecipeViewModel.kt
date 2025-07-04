@@ -34,26 +34,17 @@ class RecipeViewModel(
 		}
 	}
 
-	fun toggleFavorite() {
+	fun toggleFavourite() {
 		viewModelScope.launch {
 			val recipe = uiState.recipe ?: return@launch
 			val newState = !recipe.isFavourite
 
-			// Instantly update local DB
 			repository.updateFavouriteLocal(recipe.id, newState)
-
-			// Optimistically update UI
 			uiState = uiState.copy(recipe = recipe.copy(isFavourite = newState))
 
-			// Fire backend call (don’t block UI)
 			runCatching {
-				if (newState) {
-					repository.apiAddFavourite(recipe.id)
-				} else {
-					repository.apiRemoveFavourite(recipe.id)
-				}
-			}.onFailure {
-				// Log or handle retry
+				if (newState) repository.apiAddFavourite(recipe.id)
+				else repository.apiRemoveFavourite(recipe.id)
 			}
 		}
 	}
