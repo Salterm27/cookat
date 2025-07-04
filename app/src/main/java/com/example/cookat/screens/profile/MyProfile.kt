@@ -40,10 +40,10 @@ fun MyProfile(
 	Scaffold(
 		topBar = {
 			TopAppBar(
-				title = { Text("Profile") },
+				title = { Text("Perfil") },
 				navigationIcon = {
 					IconButton(onClick = onNavigateBack) {
-						Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+						Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Atras")
 					}
 				}
 			)
@@ -80,7 +80,7 @@ fun MyProfile(
 					onClick = viewModel::showDialog,
 					enabled = uiState.isChanged
 				) {
-					Text("Update Profile")
+					Text("Actualizar Perfil")
 				}
 			}
 
@@ -93,16 +93,16 @@ fun MyProfile(
 	if (uiState.showConfirmationDialog) {
 		AlertDialog(
 			onDismissRequest = viewModel::dismissDialog,
-			title = { Text("Confirm Changes") },
-			text = { Text("Are you sure you want to update your profile?") },
+			title = { Text("Confirmacion de Cambios") },
+			text = { Text("Estas seguro que queres actualizar tu perfil? Este cambio no puede deshacerse.") },
 			confirmButton = {
 				TextButton(onClick = { viewModel.confirmUpdate(onNavigateTo) }) {
-					Text("Yes")
+					Text("Si")
 				}
 			},
 			dismissButton = {
 				TextButton(onClick = viewModel::dismissDialog) {
-					Text("Cancel")
+					Text("Cancelar")
 				}
 			}
 		)

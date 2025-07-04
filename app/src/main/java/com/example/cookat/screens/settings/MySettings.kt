@@ -22,9 +22,9 @@ fun MySettings(onNavigateTo: () -> Unit) {
 			verticalArrangement = Arrangement.Center,
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
-			Text(text = "Settings Page")
+			Text(text = "Pagina de Configuracion")
 			Button(onClick = onNavigateTo) {
-				Text("Submit")
+				Text("Volver")
 			}
 		}
 	}
