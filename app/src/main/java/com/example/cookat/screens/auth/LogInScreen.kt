@@ -123,6 +123,7 @@ fun LogInScreen(
 			TextButton(onClick = onNavigateToPassword) {
 				Text("Olvide mi contraseña", color = MaterialTheme.colorScheme.primary)
 			}
+
 			TextButton(onClick = onNavigateToRegister) {
 				Text("No tenes una cuenta? Registrate!", color = MaterialTheme.colorScheme.primary)
 			}
