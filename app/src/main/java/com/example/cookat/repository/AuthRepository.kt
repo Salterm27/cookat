@@ -1,17 +1,60 @@
 package com.example.cookat.repository
 
+import android.content.Context
 import com.example.cookat.data.local.session.SessionManager
 import com.example.cookat.data.remote.SupabaseClient
 import com.example.cookat.models.dbModels.users.UserModel
+import com.example.cookat.network.BackendClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.exceptions.BadRequestRestException
+import retrofit2.Retrofit
 
 class AuthRepository(
-	private val sessionManager: SessionManager
+	private val sessionManager: SessionManager,
+	private val context: Context
 ) {
 
 	private val auth = SupabaseClient.client.auth
+	private val backendApi = BackendClient.create(context) // ✅ usa el mismo cliente que todo el backend
+
+	suspend fun requestPasswordReset(email: String): Result<Unit> {
+		return try {
+			val response = backendApi.requestPasswordReset(mapOf("email" to email))
+			if (response.isSuccessful) {
+				Result.success(Unit)
+			} else {
+				Result.failure(Exception("Error al enviar código: ${response.code()}"))
+			}
+		} catch (e: Exception) {
+			Result.failure(e)
+		}
+	}
+
+	// Dentro de AuthRepository.kt (ya tienes los otros métodos)
+
+	suspend fun resetPassword(email: String, code: String, newPassword: String): Result<Unit> {
+		return try {
+			val response = backendApi.resetPassword(
+				mapOf(
+					"email" to email,
+					"code" to code,
+					"newPassword" to newPassword
+				)
+			)
+			if (response.isSuccessful) {
+				Result.success(Unit)
+			} else {
+				Result.failure(Exception("Error al cambiar la contraseña: ${response.code()}"))
+			}
+		} catch (e: Exception) {
+			Result.failure(e)
+		}
+	}
+
+
+
+
 
 	// Login with Supabase & save token to DataStore
 	suspend fun login(email: String, password: String): Result<Unit> {

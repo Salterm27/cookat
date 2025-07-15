@@ -18,9 +18,12 @@ import com.example.cookat.data.local.session.SessionManager
 import com.example.cookat.models.dbModels.users.ProfileScreen
 import com.example.cookat.network.BackendClient
 import com.example.cookat.repository.AuthRepository
+import com.example.cookat.screens.auth.ForgotPasswordRequestScreen
+import com.example.cookat.screens.auth.ForgotPasswordResetScreen
 import com.example.cookat.screens.auth.LogInScreen
 import com.example.cookat.screens.auth.PasswordScreen
 import com.example.cookat.screens.auth.RegisterScreen
+import com.example.cookat.screens.auth.ResetPasswordScreen
 import com.example.cookat.screens.auth.ValidatePasswordScreen
 import com.example.cookat.screens.home.HomeScreen
 import com.example.cookat.screens.recipes.NewRecipe
@@ -70,7 +73,7 @@ fun AppNavigation() {
 				factory = object : ViewModelProvider.Factory {
 					override fun <T : ViewModel> create(modelClass: Class<T>): T {
 						val sessionManager = SessionManager(context) // ✅ 1. create it!
-						val repo = AuthRepository(sessionManager)    // ✅ 2. pass it in
+						val repo = AuthRepository(sessionManager, context = context) // ✅ 2. pass it in
 						return LoginViewModel(repo) as T
 					}
 				}
@@ -80,7 +83,7 @@ fun AppNavigation() {
 				viewModel = viewModel,
 				onNavigateToRegister = { navController.navigate("register") },
 				onLoginSuccess = { navController.navigate("home") },
-				onNavigateToPassword = { navController.navigate("password") }
+				onNavigateToPassword = { navController.navigate("forgot_password") }
 			)
 		}
 
@@ -95,6 +98,19 @@ fun AppNavigation() {
 		composable("home") {
 			HomeScreen(navController)
 		}
+
+		composable("forgot_password") {
+			ForgotPasswordRequestScreen(navController = navController)
+		}
+
+		composable(
+			"reset_password/{email}",
+			arguments = listOf(navArgument("email") { type = NavType.StringType })
+		) { backStackEntry ->
+			ResetPasswordScreen(backStackEntry = backStackEntry, navController = navController)
+		}
+
+
 
 		composable("password") {
 			PasswordScreen(onNavigateTo = { navController.navigate("validatePassword") })

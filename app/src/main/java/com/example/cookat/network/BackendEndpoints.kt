@@ -4,6 +4,7 @@ import com.example.cookat.models.dbModels.recipes.RecipeModel
 import com.example.cookat.models.dbModels.recipes.RecipesWrapper
 import com.example.cookat.models.dbModels.users.UserModel
 import com.example.cookat.network.dto.RecipeDto
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -49,4 +50,10 @@ interface BackendEndpoints {
 
 	@GET("recipes/{id}")
 	suspend fun getRecipeById(@Path("id") id: String): RecipeDto
+
+	@POST("/auth/request-reset")
+	suspend fun requestPasswordReset(@Body body: Map<String, String>): Response<Unit>
+
+	@POST("/auth/reset-password")
+	suspend fun resetPassword(@Body body: Map<String, String>): Response<Unit>
 }
