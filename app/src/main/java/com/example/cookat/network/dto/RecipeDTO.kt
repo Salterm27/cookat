@@ -21,5 +21,8 @@ data class RecipeDto(
 	val type: String?,
 	@SerializedName("edited_date")
 	val editedDate: String?,
-	val rating: Double
+	val rating: Double,
+	@SerializedName("recipe_ingredients")
+	val ingredientsJson: String?,
+	val stepsJson: String?
 )

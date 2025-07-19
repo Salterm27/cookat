@@ -51,7 +51,10 @@ fun RecipeContent(
 				style = MaterialTheme.typography.headlineSmall,
 				modifier = Modifier.padding(top = 16.dp)
 			)
-			// TODO: Use items() to render ingredients
+			Text(
+				text = recipe.ingredientsJson ?: "No data",
+				style = MaterialTheme.typography.bodyMedium
+			)
 		}
 
 		item {
@@ -60,7 +63,10 @@ fun RecipeContent(
 				style = MaterialTheme.typography.headlineSmall,
 				modifier = Modifier.padding(top = 16.dp)
 			)
-			// TODO: Use items() to render steps
+			Text(
+				text = recipe.stepsJson ?: "No data",
+				style = MaterialTheme.typography.bodyMedium
+			)
 		}
 	}
 }
