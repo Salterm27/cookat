@@ -24,12 +24,17 @@ class AuthRepository(
 			if (response.isSuccessful) {
 				Result.success(Unit)
 			} else {
-				Result.failure(Exception("Error al enviar código: ${response.code()}"))
+				val errorBody = response.errorBody()?.string()
+				val errorMessage = errorBody?.let {
+					Regex("\"error\"\\s*:\\s*\"([^\"]+)\"").find(it)?.groupValues?.get(1)
+				} ?: "Error desconocido"
+				Result.failure(Exception(errorMessage))
 			}
 		} catch (e: Exception) {
 			Result.failure(e)
 		}
 	}
+
 
 	// Dentro de AuthRepository.kt (ya tienes los otros métodos)
 
