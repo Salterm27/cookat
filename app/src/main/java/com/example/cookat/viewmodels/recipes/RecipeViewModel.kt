@@ -1,5 +1,6 @@
 package com.example.cookat.viewmodels.recipes
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -19,6 +20,7 @@ class RecipeViewModel(
 
 	init {
 		loadRecipe(recipeId)
+
 	}
 
 	fun loadRecipe(recipeId: String) {
@@ -26,6 +28,7 @@ class RecipeViewModel(
 			uiState = uiState.copy(isLoading = true)
 
 			val result = repository.getRecipeById(recipeId)
+			Log.d("RecipeViewModel", "Loaded recipe: $result")
 			uiState = if (result.isSuccess) {
 				uiState.copy(isLoading = false, recipe = result.getOrNull())
 			} else {

@@ -17,9 +17,6 @@ class RecipeRepository(context: Context) {
 	suspend fun getRecipeById(id: String): Result<RecipeModel> {
 		return withContext(Dispatchers.IO) {
 			try {
-				val local = dao.getRecipeById(id)?.toModel()
-				if (local != null) return@withContext Result.success(local)
-
 				val remote = api.getRecipeById(id)
 				dao.insert(remote.toEntity())
 				Result.success(remote.toModel())
