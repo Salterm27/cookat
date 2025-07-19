@@ -33,7 +33,9 @@ fun RecipeModel.toEntity() = RecipeEntity(
 	type = type,
 	editedDate = editedDate,
 	rating = rating,
-	isFavourite = isFavourite
+	isFavourite = isFavourite,
+	ingredientsJson = ingredientsJson,
+	stepsJson = stepsJson
 )
 
 // === DTO -> Entity ===
@@ -50,7 +52,9 @@ fun RecipeDto.toEntity(isFavourite: Boolean = false) = RecipeEntity(
 	type = type,
 	editedDate = editedDate,
 	rating = rating,
-	isFavourite = isFavourite
+	isFavourite = isFavourite,
+	ingredientsJson = ingredientsJson,
+	stepsJson = stepsJson
 )
 
 // === DTO -> Model ===
@@ -67,5 +71,7 @@ fun RecipeDto.toModel(isFavourite: Boolean = false) = RecipeModel(
 	type = type,
 	editedDate = editedDate,
 	rating = rating,
-	isFavourite = isFavourite
+	isFavourite = isFavourite,
+	ingredientsJson = ingredientsJson,
+	stepsJson = stepsJson
 )
