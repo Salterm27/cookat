@@ -1,5 +1,7 @@
 package com.example.cookat.network.dto
 
+import com.example.cookat.models.dbModels.recipes.IngredientModel
+import com.example.cookat.models.dbModels.recipes.StepModel
 import com.google.gson.annotations.SerializedName
 
 data class RecipeDto(
@@ -23,6 +25,6 @@ data class RecipeDto(
 	val editedDate: String?,
 	val rating: Double,
 	@SerializedName("recipe_ingredients")
-	val ingredientsJson: String?,
-	val stepsJson: String?
+	val ingredients: List<IngredientModel>,
+	val steps: List<StepModel>
 )

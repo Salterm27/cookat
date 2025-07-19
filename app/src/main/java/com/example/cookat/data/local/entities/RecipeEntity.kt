@@ -2,6 +2,8 @@ package com.example.cookat.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.cookat.models.dbModels.recipes.IngredientModel
+import com.example.cookat.models.dbModels.recipes.StepModel
 
 @Entity(tableName = "recipes")
 data class RecipeEntity(
@@ -17,6 +19,6 @@ data class RecipeEntity(
 	val editedDate: String?,
 	val rating: Double,
 	val isFavourite: Boolean = false,
-	val ingredientsJson: String?,
-	val stepsJson: String?
+	val ingredients: List<IngredientModel>?,
+	val steps: List<StepModel>?
 )

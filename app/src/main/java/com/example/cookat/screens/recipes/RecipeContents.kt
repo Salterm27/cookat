@@ -45,28 +45,8 @@ fun RecipeContent(
 			)
 		}
 
-		item {
-			Text(
-				"Ingredientes",
-				style = MaterialTheme.typography.headlineSmall,
-				modifier = Modifier.padding(top = 16.dp)
-			)
-			Text(
-				text = recipe.ingredientsJson ?: "No data",
-				style = MaterialTheme.typography.bodyMedium
-			)
-		}
+		ingredientList(recipe.ingredients)
+		stepList(recipe.steps)
 
-		item {
-			Text(
-				"Pasos",
-				style = MaterialTheme.typography.headlineSmall,
-				modifier = Modifier.padding(top = 16.dp)
-			)
-			Text(
-				text = recipe.stepsJson ?: "No data",
-				style = MaterialTheme.typography.bodyMedium
-			)
-		}
 	}
 }
