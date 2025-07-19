@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.cookat.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class ResetPasswordUiState(
@@ -29,8 +30,11 @@ class ResetPasswordViewModel(
 	}
 
 	fun onCodeChange(value: String) {
-		_uiState.value = _uiState.value.copy(code = value)
+		if (value.length <= 6 && value.all { it.isDigit() }) {
+			_uiState.value = _uiState.value.copy(code = value)
+		}
 	}
+
 
 	fun onNewPasswordChange(value: String) {
 		_uiState.value = _uiState.value.copy(newPassword = value)
@@ -62,12 +66,27 @@ class ResetPasswordViewModel(
 		}
 	}
 
+	fun setErrorMessage(message: String) {
+		_uiState.update { it.copy(errorMessage = message) }
+	}
+
+
 	fun submit(onSuccess: () -> Unit) {
 		val state = _uiState.value
 
 		// Validaciones básicas
 		if (state.code.isBlank() || state.newPassword.isBlank() || state.confirmPassword.isBlank()) {
 			_uiState.value = state.copy(errorMessage = "Todos los campos son obligatorios")
+			return
+		}
+
+		if (state.code.length != 6 || !state.code.all { it.isDigit() }) {
+			_uiState.value = state.copy(errorMessage = "El código debe tener 6 dígitos numéricos")
+			return
+		}
+
+		if (state.newPassword.length < 8) {
+			_uiState.value = state.copy(errorMessage = "La contraseña debe tener al menos 8 caracteres")
 			return
 		}
 
