@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName
 
 data class RecipeDto(
 	val id: String,
-
 	@SerializedName("user_id")
 	val userID: String,
 	val username: String?,
@@ -25,6 +24,6 @@ data class RecipeDto(
 	val editedDate: String?,
 	val rating: Double,
 	@SerializedName("recipe_ingredients")
-	val ingredients: List<IngredientModel>,
-	val steps: List<StepModel>
+	val ingredients: List<IngredientModel>?,
+	val steps: List<StepModel>?
 )
