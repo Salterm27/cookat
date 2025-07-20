@@ -46,4 +46,9 @@ class SessionManager(private val context: Context) {
 			prefs.remove(ACCESS_TOKEN)
 		}
 	}
+
+	suspend fun isLoggedIn(): Boolean {
+		val token = getAccessToken()
+		return !token.isNullOrBlank()
+	}
 }

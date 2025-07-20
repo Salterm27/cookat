@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
-fun DrawerContent(navController: NavController) {
+fun DrawerContent(navController: NavController, onNewRecipeClick: () -> Unit) {
 	Surface(
 		color = MaterialTheme.colorScheme.surfaceVariant,
 		tonalElevation = 4.dp,
@@ -29,11 +29,11 @@ fun DrawerContent(navController: NavController) {
 			modifier = Modifier.padding(16.dp),
 			verticalArrangement = Arrangement.spacedBy(12.dp)
 		) {
-			DrawerItem("Profile") { navController.navigate("profile") }
-			DrawerItem("Recipes")
-			DrawerItem("New Recipe") { navController.navigate("newRecipe") }
-			DrawerItem("Drafts")
-			DrawerItem("Settings") { navController.navigate("settings") }
+			DrawerItem("Perfil") { navController.navigate("profile") }
+			DrawerItem("Recetas")
+			DrawerItem("Nueva Receta", onClick = onNewRecipeClick)
+			DrawerItem("Bocetos")
+			DrawerItem("Configuracion") { navController.navigate("settings") }
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.example.cookat.viewmodels.home
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -77,4 +78,68 @@ class HomeViewModel(context: Context) : ViewModel() {
 	fun setSearchQuery(query: String) {
 		uiState = uiState.copy(searchQuery = query)
 	}
+
+	fun showNewRecipeDialog() {
+		uiState =
+			uiState.copy(showNewRecipeDialog = true, recipeNameError = null, pendingRecipeName = "")
+	}
+
+	fun hideNewRecipeDialog() {
+		uiState = uiState.copy(showNewRecipeDialog = false, recipeNameError = null)
+	}
+
+	fun onRecipeNameChange(name: String) {
+		uiState = uiState.copy(pendingRecipeName = name)
+	}
+
+	fun submitNewRecipeName() {
+		val name = uiState.pendingRecipeName.trim()
+		if (name.isEmpty()) {
+			uiState = uiState.copy(recipeNameError = "Name cannot be empty")
+			return
+		}
+
+		viewModelScope.launch {
+			uiState = uiState.copy(isCheckingRecipeName = true)
+			val exists = repository.recipeExistsRemotely(name)
+			Log.d("HomeViewModel", "Recipe Exists: $exists")
+			uiState = if (exists) {
+				uiState.copy(
+					isCheckingRecipeName = false,
+					showNewRecipeDialog = false,
+					showNameExistsDialog = true
+				)
+			} else {
+				uiState.copy(
+					isCheckingRecipeName = false,
+					showNewRecipeDialog = false,
+					navigateToRecipeEditor = name
+				)
+			}
+		}
+	}
+
+	fun hideNameExistsDialog() {
+		uiState = uiState.copy(showNameExistsDialog = false)
+	}
+
+	// For Replace/Modify/Create actions:
+	fun onReplaceRecipe() { /* your logic here */
+	}
+
+	fun onModifyRecipe() { /* your logic here */
+	}
+
+	fun onCreateWithAnotherName() {
+		uiState = uiState.copy(
+			showNameExistsDialog = false,
+			showNewRecipeDialog = true,
+			pendingRecipeName = ""
+		)
+	}
+
+	fun onNavigatedToRecipeEditor() {
+		uiState = uiState.copy(navigateToRecipeEditor = null)
+	}
+
 }

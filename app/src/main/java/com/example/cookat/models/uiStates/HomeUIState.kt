@@ -11,5 +11,12 @@ data class HomeUiState(
 	val recipes: List<RecipeModel> = emptyList(),
 	val errorMessage: String? = null,
 	val currentFilter: RecipeFilter = RecipeFilter.ALL,
-	val searchQuery: String = ""
+	val searchQuery: String = "",
+
+	val showNewRecipeDialog: Boolean = false,
+	val isCheckingRecipeName: Boolean = false,
+	val recipeNameError: String? = null,
+	val pendingRecipeName: String = "",
+	val navigateToRecipeEditor: String? = null, // name to navigate with, or null if not navigating
+	val showNameExistsDialog: Boolean = false
 )

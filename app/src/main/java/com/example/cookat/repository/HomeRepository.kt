@@ -50,4 +50,12 @@ class HomeRepository(context: Context) {
 		dao.updateFavourite(recipeId, newState)
 		if (newState) api.addFavourite(recipeId) else api.removeFavourite(recipeId)
 	}
+
+	suspend fun recipeExistsRemotely(name: String): Boolean {
+		return try {
+			api.checkNewRecipeName(name)
+		} catch (e: Exception) {
+			false
+		}
+	}
 }

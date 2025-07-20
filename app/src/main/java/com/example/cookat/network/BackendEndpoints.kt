@@ -56,4 +56,7 @@ interface BackendEndpoints {
 
 	@POST("/auth/reset-password")
 	suspend fun resetPassword(@Body body: Map<String, String>): Response<Unit>
+
+	@GET("recipes/search-own")
+	suspend fun checkNewRecipeName(@Query("name") name: String): Boolean
 }

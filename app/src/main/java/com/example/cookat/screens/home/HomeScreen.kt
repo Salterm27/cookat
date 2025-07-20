@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.cookat.screens.home.components.HomeContent
 import com.example.cookat.screens.home.components.HomeTopBar
+import com.example.cookat.screens.home.components.dialogs.HomeDialogs
 import com.example.cookat.screens.home.components.sidemenu.DrawerContent
 import com.example.cookat.viewmodels.home.HomeViewModel
 
@@ -40,7 +41,9 @@ fun HomeScreen(navController: NavController) {
 
 	ModalNavigationDrawer(
 		drawerState = drawerState,
-		drawerContent = { DrawerContent(navController) }
+		drawerContent = {
+			DrawerContent(navController, onNewRecipeClick = { viewModel.showNewRecipeDialog() })
+		}
 	) {
 		Scaffold(
 			topBar = {
@@ -65,6 +68,8 @@ fun HomeScreen(navController: NavController) {
 					viewModel.loadMoreIfNeeded(lastVisible, totalItems)
 				}
 			)
+
 		}
+		HomeDialogs(state = state, viewModel = viewModel)
 	}
 }
