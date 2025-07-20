@@ -101,7 +101,7 @@ fun RecipeCard(
 					) {
 						Row {
 							repeat(5) { i ->
-								val starFilled = i < recipe.rating.toInt()
+								val starFilled = i < recipe.rating.toDouble()
 								Icon(
 									imageVector = if (starFilled) Icons.Filled.Star else Icons.Filled.StarBorder,
 									contentDescription = null,

@@ -12,12 +12,9 @@ import com.example.cookat.repository.HomeRepository
 import kotlinx.coroutines.launch
 
 class HomeViewModel(context: Context) : ViewModel() {
-
 	private val repository = HomeRepository(context)
-
 	var uiState by mutableStateOf(HomeUiState())
 		private set
-
 	private var currentPage = 1
 	private var isLoadingMore = false
 
