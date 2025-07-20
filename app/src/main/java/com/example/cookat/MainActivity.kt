@@ -27,8 +27,8 @@ import com.example.cookat.screens.auth.RegisterScreen
 import com.example.cookat.screens.auth.ResetPasswordScreen
 import com.example.cookat.screens.auth.ValidatePasswordScreen
 import com.example.cookat.screens.home.HomeScreen
-import com.example.cookat.screens.recipes.NewRecipe
 import com.example.cookat.screens.recipes.RecipeDetails
+import com.example.cookat.screens.recipes.RecipeEditor
 import com.example.cookat.screens.settings.MySettings
 import com.example.cookat.ui.theme.CookatTheme
 import com.example.cookat.viewmodels.auth.LoginViewModel
@@ -147,7 +147,7 @@ fun AppNavigation() {
 		}
 
 		composable("newRecipe") {
-			NewRecipe(onNavigateTo = { navController.navigate("home") })
+			RecipeEditor(onNavigateTo = { navController.navigate("home") })
 		}
 
 		composable(

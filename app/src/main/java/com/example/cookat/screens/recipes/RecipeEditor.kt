@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 
 
 @Composable
-fun NewRecipe(onNavigateTo: () -> Unit) {
+fun RecipeEditor(onNavigateTo: () -> Unit) {
 	Scaffold { padding ->
 		Column(
 			modifier = Modifier

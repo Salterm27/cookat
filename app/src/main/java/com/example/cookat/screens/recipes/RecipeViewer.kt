@@ -15,9 +15,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.cookat.R
 import com.example.cookat.models.dbModels.recipes.RecipeModel
+import com.example.cookat.screens.recipes.viewer.components.ingredientList
+import com.example.cookat.screens.recipes.viewer.components.stepList
 
 @Composable
-fun RecipeContent(
+fun RecipeViewer(
 	recipe: RecipeModel,
 	modifier: Modifier = Modifier
 ) {
@@ -44,7 +46,6 @@ fun RecipeContent(
 				style = MaterialTheme.typography.titleMedium
 			)
 		}
-
 		ingredientList(recipe.ingredients)
 		stepList(recipe.steps)
 
