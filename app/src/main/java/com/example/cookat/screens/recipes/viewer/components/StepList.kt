@@ -1,4 +1,4 @@
-package com.example.cookat.screens.recipes
+package com.example.cookat.screens.recipes.viewer.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
@@ -7,27 +7,27 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.cookat.models.dbModels.recipes.IngredientModel
+import com.example.cookat.models.dbModels.recipes.StepModel
 
-fun LazyListScope.ingredientList(ingredients: List<IngredientModel>?) {
+fun LazyListScope.stepList(steps: List<StepModel>?) {
 	item {
 		Text(
-			"Ingredientes",
+			"Pasos",
 			style = MaterialTheme.typography.headlineSmall,
 			modifier = Modifier.padding(top = 16.dp)
 		)
 	}
 
-	if (ingredients.isNullOrEmpty()) {
+	if (steps.isNullOrEmpty()) {
 		item {
 			Text("No data", style = MaterialTheme.typography.bodyMedium)
 		}
 	} else {
-		items(ingredients) { ingredient ->
+		items(steps.sortedBy { it.stepNumber }) { step ->
 			Text(
-				text = "- ${ingredient.quantity} ${ingredient.unit} de ${ingredient.name}",
+				text = "${step.stepNumber}. ${step.description}",
 				style = MaterialTheme.typography.bodyMedium,
-				modifier = Modifier.padding(vertical = 2.dp)
+				modifier = Modifier.padding(vertical = 4.dp)
 			)
 		}
 	}

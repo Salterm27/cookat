@@ -1,4 +1,4 @@
-package com.example.cookat.screens.recipes
+package com.example.cookat.screens.recipes.editor
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 
 
 @Composable
-fun NewRecipe(onNavigateTo: () -> Unit) {
+fun RecipeEditor(onNavigateTo: () -> Unit) {
 	Scaffold { padding ->
 		Column(
 			modifier = Modifier

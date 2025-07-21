@@ -1,4 +1,4 @@
-package com.example.cookat.screens.recipes
+package com.example.cookat.screens.recipes.viewer
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.cookat.models.uiStates.RecipeUiState
+import com.example.cookat.screens.recipes.viewer.components.RecipeActions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,7 +63,7 @@ fun RecipeDetailsContent(
 			}
 
 			state.recipe != null -> {
-				RecipeContent(
+				RecipeViewer(
 					recipe = state.recipe,
 					modifier = Modifier.padding(padding)
 				)

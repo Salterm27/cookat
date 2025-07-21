@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -19,15 +21,14 @@ import com.example.cookat.models.dbModels.users.ProfileScreen
 import com.example.cookat.network.BackendClient
 import com.example.cookat.repository.AuthRepository
 import com.example.cookat.screens.auth.ForgotPasswordRequestScreen
-import com.example.cookat.screens.auth.ForgotPasswordResetScreen
 import com.example.cookat.screens.auth.LogInScreen
 import com.example.cookat.screens.auth.PasswordScreen
 import com.example.cookat.screens.auth.RegisterScreen
 import com.example.cookat.screens.auth.ResetPasswordScreen
 import com.example.cookat.screens.auth.ValidatePasswordScreen
 import com.example.cookat.screens.home.HomeScreen
-import com.example.cookat.screens.recipes.NewRecipe
-import com.example.cookat.screens.recipes.RecipeDetails
+import com.example.cookat.screens.recipes.editor.RecipeEditor
+import com.example.cookat.screens.recipes.viewer.RecipeDetails
 import com.example.cookat.screens.settings.MySettings
 import com.example.cookat.ui.theme.CookatTheme
 import com.example.cookat.viewmodels.auth.LoginViewModel
@@ -67,13 +68,32 @@ fun AppNavigation() {
 	val navController = rememberNavController()
 	val context = LocalContext.current
 
-	NavHost(navController = navController, startDestination = "login") {
+	NavHost(navController = navController, startDestination = "start") {
+
+		composable("start") {
+			val context = LocalContext.current
+			val sessionManager = remember { SessionManager(context) }
+
+			LaunchedEffect(Unit) {
+				if (sessionManager.isLoggedIn()) {
+					navController.navigate("home") {
+						popUpTo("start") { inclusive = true }
+					}
+				} else {
+					navController.navigate("login") {
+						popUpTo("start") { inclusive = true }
+					}
+				}
+			}
+		}
+
 		composable("login") {
 			val viewModel: LoginViewModel = viewModel(
 				factory = object : ViewModelProvider.Factory {
 					override fun <T : ViewModel> create(modelClass: Class<T>): T {
 						val sessionManager = SessionManager(context) // ✅ 1. create it!
-						val repo = AuthRepository(sessionManager, context = context) // ✅ 2. pass it in
+						val repo =
+							AuthRepository(sessionManager, context = context) // ✅ 2. pass it in
 						return LoginViewModel(repo) as T
 					}
 				}
@@ -87,7 +107,6 @@ fun AppNavigation() {
 			)
 		}
 
-		// ✅ No changes needed for the other destinations:
 		composable("register") {
 			RegisterScreen(
 				onNavigateTo = { navController.navigate("login") },
@@ -128,7 +147,7 @@ fun AppNavigation() {
 		}
 
 		composable("newRecipe") {
-			NewRecipe(onNavigateTo = { navController.navigate("home") })
+			RecipeEditor(onNavigateTo = { navController.navigate("home") })
 		}
 
 		composable(

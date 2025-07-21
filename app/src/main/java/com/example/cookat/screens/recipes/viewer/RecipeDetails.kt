@@ -1,4 +1,4 @@
-package com.example.cookat.screens.recipes
+package com.example.cookat.screens.recipes.viewer
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
