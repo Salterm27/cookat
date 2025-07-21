@@ -1,4 +1,4 @@
-package com.example.cookat.screens.recipes
+package com.example.cookat.screens.recipes.viewer
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

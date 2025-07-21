@@ -27,8 +27,8 @@ import com.example.cookat.screens.auth.RegisterScreen
 import com.example.cookat.screens.auth.ResetPasswordScreen
 import com.example.cookat.screens.auth.ValidatePasswordScreen
 import com.example.cookat.screens.home.HomeScreen
-import com.example.cookat.screens.recipes.RecipeDetails
-import com.example.cookat.screens.recipes.RecipeEditor
+import com.example.cookat.screens.recipes.editor.RecipeEditor
+import com.example.cookat.screens.recipes.viewer.RecipeDetails
 import com.example.cookat.screens.settings.MySettings
 import com.example.cookat.ui.theme.CookatTheme
 import com.example.cookat.viewmodels.auth.LoginViewModel
