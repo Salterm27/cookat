@@ -1,24 +1,24 @@
 package com.example.cookat.screens.recipes.editor.WizardScreens
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.cookat.models.uiStates.Ingredient
 import com.example.cookat.models.uiStates.UnitOfMeasure
-import com.example.cookat.screens.recipes.editor.WizardScreens.Component.IngredientDisplayRow
+import com.example.cookat.screens.recipes.editor.WizardScreens.Component.IngredientList
 import com.example.cookat.screens.recipes.editor.WizardScreens.Component.Input.IngredientInputRow
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,8 +31,25 @@ fun IngredientsStep(
 	onBack: () -> Unit
 ) {
 	Scaffold(
-		topBar = { /* ... */ },
-		bottomBar = { /* ... */ }
+		topBar = {
+			TopAppBar(
+				title = { Text("Paso 1 - Contanos sobre tu receta") },
+				navigationIcon = {
+					TextButton(onClick = onBack) {
+						Text("Volver")
+					}
+				}
+			)
+		},
+		bottomBar = {
+			Button(
+				onClick = onNext,
+				enabled = ingredients.isNotEmpty(),
+				modifier = Modifier.fillMaxWidth()
+			) {
+				Text("Siguiente")
+			}
+		}
 	) { padding ->
 		Column(
 			modifier = Modifier
@@ -46,19 +63,11 @@ fun IngredientsStep(
 			Text("Lista de ingredientes:", style = MaterialTheme.typography.labelLarge)
 			Spacer(Modifier.height(8.dp))
 			// Scrollable ingredient list
-			LazyColumn(
-				modifier = Modifier
-					.weight(1f)
-					.fillMaxWidth(),
-				contentPadding = PaddingValues(bottom = 60.dp)
-			) {
-				itemsIndexed(ingredients) { idx, ingredient ->
-					IngredientDisplayRow(
-						ingredient = ingredient,
-						onRemove = { onRemoveIngredient(idx) }
-					)
-				}
-			}
+			IngredientList(
+				ingredients = ingredients,
+				onRemoveIngredient = onRemoveIngredient,
+				modifier = Modifier.weight(1f)
+			)
 		}
 	}
 }
