@@ -101,20 +101,38 @@ class HomeViewModel(context: Context) : ViewModel() {
 
 		viewModelScope.launch {
 			uiState = uiState.copy(isCheckingRecipeName = true)
-			val exists = repository.recipeExistsRemotely(name)
-			Log.d("HomeViewModel", "Recipe Exists: $exists")
-			uiState = if (exists) {
-				uiState.copy(
-					isCheckingRecipeName = false,
-					showNewRecipeDialog = false,
-					showNameExistsDialog = true
-				)
-			} else {
-				uiState.copy(
-					isCheckingRecipeName = false,
-					showNewRecipeDialog = false,
-					navigateToRecipeEditor = name
-				)
+			Log.d("HomeViewModel", "Checking recipe name: $name")
+
+			val result = repository.recipeExistsRemotely(name)
+			Log.d("HomeViewModel", "Recipe name check result: $result")
+
+			uiState = when {
+				result.isSuccess && result.getOrNull() == true -> {
+					// 200: exists
+					uiState.copy(
+						isCheckingRecipeName = false,
+						showNewRecipeDialog = false,
+						showNameExistsDialog = true
+					)
+				}
+
+				result.isSuccess && result.getOrNull() == false -> {
+					// 404: does not exist
+					uiState.copy(
+						isCheckingRecipeName = false,
+						showNewRecipeDialog = false,
+						navigateToRecipeEditor = name
+					)
+				}
+
+				else -> {
+					// Any other error
+					uiState.copy(
+						isCheckingRecipeName = false,
+						showNewRecipeDialog = false,
+						errorMessage = "Could not validate recipe name. Please try again."
+					)
+				}
 			}
 		}
 	}
@@ -141,5 +159,6 @@ class HomeViewModel(context: Context) : ViewModel() {
 	fun onNavigatedToRecipeEditor() {
 		uiState = uiState.copy(navigateToRecipeEditor = null)
 	}
+
 
 }

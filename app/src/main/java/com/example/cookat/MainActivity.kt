@@ -34,6 +34,8 @@ import com.example.cookat.ui.theme.CookatTheme
 import com.example.cookat.viewmodels.auth.LoginViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -147,7 +149,7 @@ fun AppNavigation() {
 		}
 
 		composable("newRecipe") {
-			RecipeEditor(onNavigateTo = { navController.navigate("home") })
+			RecipeEditor("test", onNavigateTo = { navController.navigate("home") })
 		}
 
 		composable(
@@ -160,6 +162,17 @@ fun AppNavigation() {
 
 		composable("settings") {
 			MySettings(onNavigateTo = { navController.navigate("home") })
+		}
+
+		composable(
+			"recipe_editor/{recipeName}",
+			arguments = listOf(navArgument("recipeName") { type = NavType.StringType })
+		) { backStackEntry ->
+			// decode to support spaces and special chars
+			val recipeName = backStackEntry.arguments?.getString("recipeName")?.let {
+				URLDecoder.decode(it, StandardCharsets.UTF_8.name())
+			} ?: ""
+			RecipeEditor(recipeName = recipeName, onNavigateTo = { navController.navigate("home") })
 		}
 	}
 }

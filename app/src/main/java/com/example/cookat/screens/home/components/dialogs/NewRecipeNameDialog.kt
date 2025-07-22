@@ -21,13 +21,13 @@ fun NewRecipeNameDialog(
 ) {
 	AlertDialog(
 		onDismissRequest = onDismiss,
-		title = { Text("New Recipe Name", style = MaterialTheme.typography.titleLarge) },
+		title = { Text("Crear una nueva receta", style = MaterialTheme.typography.titleLarge) },
 		text = {
 			Column {
 				OutlinedTextField(
 					value = name,
 					onValueChange = onNameChange,
-					label = { Text("Name") },
+					label = { Text("Mi receta") },
 					singleLine = true
 				)
 				if (error != null) {
@@ -44,10 +44,10 @@ fun NewRecipeNameDialog(
 			TextButton(
 				onClick = onSubmit,
 				enabled = !isChecking
-			) { Text("Send") }
+			) { Text("Enviar") }
 		},
 		dismissButton = {
-			TextButton(onClick = onDismiss) { Text("Cancel") }
+			TextButton(onClick = onDismiss) { Text("Cancelar") }
 		}
 	)
 }
