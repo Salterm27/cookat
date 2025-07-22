@@ -1,4 +1,4 @@
-package com.example.cookat.screens.recipes.editor.WizardScreens.Component.Ingredients
+package com.example.cookat.screens.recipes.editor.wizardScreens.component.ingredients
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues

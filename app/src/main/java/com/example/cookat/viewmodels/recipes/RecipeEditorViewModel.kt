@@ -51,4 +51,24 @@ class RecipeEditorViewModel : ViewModel() {
 	fun goTo(step: EditorStep) {
 		_uiState.update { it.copy(currentStep = step) }
 	}
+
+	fun editStep(idx: Int, newText: String) {
+		if (idx in _uiState.value.steps.indices && newText.isNotBlank()) {
+			_uiState.update {
+				it.copy(steps = it.steps.toMutableList().apply { set(idx, newText) })
+			}
+		}
+	}
+
+	// Move a step up/down
+	fun moveStep(from: Int, to: Int) {
+		if (from in _uiState.value.steps.indices && to in _uiState.value.steps.indices) {
+			_uiState.update {
+				val mutable = it.steps.toMutableList()
+				val step = mutable.removeAt(from)
+				mutable.add(to, step)
+				it.copy(steps = mutable)
+			}
+		}
+	}
 }

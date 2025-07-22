@@ -1,4 +1,4 @@
-package com.example.cookat.screens.recipes.editor.WizardScreens
+package com.example.cookat.screens.recipes.editor.wizardScreens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

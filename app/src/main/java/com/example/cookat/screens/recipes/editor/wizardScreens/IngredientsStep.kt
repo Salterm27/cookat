@@ -1,4 +1,4 @@
-package com.example.cookat.screens.recipes.editor.WizardScreens
+package com.example.cookat.screens.recipes.editor.wizardScreens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.cookat.models.uiStates.Ingredient
 import com.example.cookat.models.uiStates.UnitOfMeasure
-import com.example.cookat.screens.recipes.editor.WizardScreens.Component.Ingredients.IngredientList
-import com.example.cookat.screens.recipes.editor.WizardScreens.Component.Input.IngredientInputRow
+import com.example.cookat.screens.recipes.editor.wizardScreens.component.ingredients.IngredientList
+import com.example.cookat.screens.recipes.editor.wizardScreens.component.input.IngredientInputRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

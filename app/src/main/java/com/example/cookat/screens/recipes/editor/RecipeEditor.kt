@@ -4,9 +4,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cookat.models.uiStates.EditorStep
-import com.example.cookat.screens.recipes.editor.WizardScreens.Component.ServingsStep
-import com.example.cookat.screens.recipes.editor.WizardScreens.DescriptionStep
-import com.example.cookat.screens.recipes.editor.WizardScreens.IngredientsStep
+import com.example.cookat.screens.recipes.editor.wizardScreens.DescriptionStep
+import com.example.cookat.screens.recipes.editor.wizardScreens.IngredientsStep
+import com.example.cookat.screens.recipes.editor.wizardScreens.component.ServingsStep
+import com.example.cookat.screens.recipes.editor.wizardScreens.component.StepsStep
 import com.example.cookat.viewmodels.recipes.RecipeEditorViewModel
 
 @Composable
@@ -38,6 +39,16 @@ fun RecipeEditor(
 		EditorStep.Servings -> ServingsStep(
 			servings = state.servings,
 			onServingsChange = { viewModel.setServings(it) },
+			onNext = { viewModel.nextStep() },
+			onBack = { viewModel.prevStep() }
+		)
+
+		EditorStep.Steps -> StepsStep(
+			steps = state.steps,
+			onAddStep = { viewModel.addStep(it) },
+			onRemoveStep = { viewModel.removeStep(it) },
+			onEditStep = { idx, newStep -> viewModel.editStep(idx, newStep) }, // Pass this!
+			onMoveStep = { from, to -> viewModel.moveStep(from, to) },         // Pass this!
 			onNext = { viewModel.nextStep() },
 			onBack = { viewModel.prevStep() }
 		)
