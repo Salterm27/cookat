@@ -4,6 +4,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cookat.models.uiStates.EditorStep
+import com.example.cookat.screens.recipes.editor.WizardScreens.Component.ServingsStep
 import com.example.cookat.screens.recipes.editor.WizardScreens.DescriptionStep
 import com.example.cookat.screens.recipes.editor.WizardScreens.IngredientsStep
 import com.example.cookat.viewmodels.recipes.RecipeEditorViewModel
@@ -33,7 +34,14 @@ fun RecipeEditor(
 			onNext = { viewModel.nextStep() },
 			onBack = { viewModel.prevStep() }
 		)
-		// Add Servings, Steps, Preview similarly
+
+		EditorStep.Servings -> ServingsStep(
+			servings = state.servings,
+			onServingsChange = { viewModel.setServings(it) },
+			onNext = { viewModel.nextStep() },
+			onBack = { viewModel.prevStep() }
+		)
+
 		else -> Text("Step not implemented yet.")
 	}
 }
