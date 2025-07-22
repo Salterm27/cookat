@@ -11,6 +11,7 @@ import com.example.cookat.models.uiStates.HomeUiState
 import com.example.cookat.models.uiStates.RecipeFilter
 import com.example.cookat.repository.HomeRepository
 import kotlinx.coroutines.launch
+import java.util.Locale.getDefault
 
 class HomeViewModel(context: Context) : ViewModel() {
 
@@ -95,7 +96,7 @@ class HomeViewModel(context: Context) : ViewModel() {
 	fun submitNewRecipeName() {
 		val name = uiState.pendingRecipeName.trim()
 		if (name.isEmpty()) {
-			uiState = uiState.copy(recipeNameError = "Name cannot be empty")
+			uiState = uiState.copy(recipeNameError = "La receta necesita un titulo")
 			return
 		}
 
@@ -130,10 +131,38 @@ class HomeViewModel(context: Context) : ViewModel() {
 					uiState.copy(
 						isCheckingRecipeName = false,
 						showNewRecipeDialog = false,
-						errorMessage = "Could not validate recipe name. Please try again."
+						errorMessage = "No pudimos validar el nombre de la receta. Intentalo otra vez."
 					)
 				}
 			}
+		}
+	}
+
+
+	fun fakeSubmitNewRecipeName() {
+		val name = uiState.pendingRecipeName.trim()
+		if (name.isEmpty()) {
+			uiState = uiState.copy(recipeNameError = "La receta necesita un titulo")
+			return
+		}
+
+		viewModelScope.launch {
+			val fakeExists = name.lowercase(getDefault()) == "tortilla"
+
+			uiState = if (fakeExists) {
+				uiState.copy(
+					isCheckingRecipeName = false,
+					showNewRecipeDialog = false,
+					showNameExistsDialog = true
+				)
+			} else {
+				uiState.copy(
+					isCheckingRecipeName = false,
+					showNewRecipeDialog = false,
+					navigateToRecipeEditor = name
+				)
+			}
+
 		}
 	}
 
@@ -146,14 +175,6 @@ class HomeViewModel(context: Context) : ViewModel() {
 	}
 
 	fun onModifyRecipe() { /* your logic here */
-	}
-
-	fun onCreateWithAnotherName() {
-		uiState = uiState.copy(
-			showNameExistsDialog = false,
-			showNewRecipeDialog = true,
-			pendingRecipeName = ""
-		)
 	}
 
 	fun onNavigatedToRecipeEditor() {

@@ -1,5 +1,6 @@
 package com.example.cookat
 
+import RecipeEditor
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -27,7 +28,6 @@ import com.example.cookat.screens.auth.RegisterScreen
 import com.example.cookat.screens.auth.ResetPasswordScreen
 import com.example.cookat.screens.auth.ValidatePasswordScreen
 import com.example.cookat.screens.home.HomeScreen
-import com.example.cookat.screens.recipes.editor.RecipeEditor
 import com.example.cookat.screens.recipes.viewer.RecipeDetails
 import com.example.cookat.screens.settings.MySettings
 import com.example.cookat.ui.theme.CookatTheme
@@ -148,10 +148,6 @@ fun AppNavigation() {
 			)
 		}
 
-		composable("newRecipe") {
-			RecipeEditor("test", onNavigateTo = { navController.navigate("home") })
-		}
-
 		composable(
 			"recipe/{id}",
 			arguments = listOf(navArgument("id") { type = NavType.StringType })
@@ -172,7 +168,11 @@ fun AppNavigation() {
 			val recipeName = backStackEntry.arguments?.getString("recipeName")?.let {
 				URLDecoder.decode(it, StandardCharsets.UTF_8.name())
 			} ?: ""
-			RecipeEditor(recipeName = recipeName, onNavigateTo = { navController.navigate("home") })
+			RecipeEditor(
+				recipeName = recipeName,
+				onFinish = { navController.navigate("home") },   // After final step
+				onCancel = { navController.popBackStack() }      // If user cancels editing
+			)
 		}
 	}
 }

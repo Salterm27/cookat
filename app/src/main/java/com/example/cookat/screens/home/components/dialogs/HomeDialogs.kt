@@ -28,7 +28,7 @@ fun HomeDialogs(
 			onNameChange = { viewModel.onRecipeNameChange(it) },
 			onReplace = { viewModel.onReplaceRecipe() },
 			onModify = { viewModel.onModifyRecipe() },
-			onTryAgain = { viewModel.submitNewRecipeName() },
+			onTryAgain = { viewModel.fakeSubmitNewRecipeName() },
 			onDismiss = { viewModel.hideNameExistsDialog() }
 		)
 	}
