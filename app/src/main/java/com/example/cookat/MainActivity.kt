@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.cookat.data.local.session.SessionManager
+import com.example.cookat.data.remote.SupabaseClient
 import com.example.cookat.models.dbModels.users.ProfileScreen
 import com.example.cookat.network.BackendClient
 import com.example.cookat.repository.AuthRepository
@@ -77,7 +78,10 @@ fun AppNavigation() {
 			val sessionManager = remember { SessionManager(context) }
 
 			LaunchedEffect(Unit) {
-				if (sessionManager.isLoggedIn()) {
+				val supabase = SupabaseClient.client
+				val validToken = sessionManager.getValidAccessToken(supabase)
+
+				if (validToken != null) {
 					navController.navigate("home") {
 						popUpTo("start") { inclusive = true }
 					}
@@ -88,6 +92,8 @@ fun AppNavigation() {
 				}
 			}
 		}
+
+
 
 		composable("login") {
 			val viewModel: LoginViewModel = viewModel(
