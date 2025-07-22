@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.cookat.models.uiStates.Ingredient
 import com.example.cookat.models.uiStates.UnitOfMeasure
-import com.example.cookat.screens.recipes.editor.WizardScreens.Component.IngredientList
+import com.example.cookat.screens.recipes.editor.WizardScreens.Component.Ingredients.IngredientList
 import com.example.cookat.screens.recipes.editor.WizardScreens.Component.Input.IngredientInputRow
 
 @OptIn(ExperimentalMaterial3Api::class)
