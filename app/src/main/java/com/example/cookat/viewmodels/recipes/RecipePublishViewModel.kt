@@ -64,7 +64,7 @@ class RecipePublishViewModel(context: Context) : ViewModel() {
 					imageUrl = TODO()
 				)
 			},
-			//state = state
+			state = state
 		)
 	}
 }

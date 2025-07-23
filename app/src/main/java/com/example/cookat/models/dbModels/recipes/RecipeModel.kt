@@ -14,5 +14,6 @@ data class RecipeModel(
 	val rating: Double = 0.0,
 	val isFavourite: Boolean = false,
 	val ingredients: List<IngredientModel>? = null,
-	val steps: List<StepModel>? = null
+	val steps: List<StepModel>? = null,
+	val state: String = "Draft"
 )
