@@ -8,6 +8,7 @@ import com.example.cookat.screens.recipes.editor.wizardScreens.DescriptionStep
 import com.example.cookat.screens.recipes.editor.wizardScreens.IngredientsStep
 import com.example.cookat.screens.recipes.editor.wizardScreens.component.ServingsStep
 import com.example.cookat.screens.recipes.editor.wizardScreens.component.StepsStep
+import com.example.cookat.screens.recipes.preview.RecipePreview
 import com.example.cookat.viewmodels.recipes.RecipeEditorViewModel
 
 @Composable
@@ -50,6 +51,14 @@ fun RecipeEditor(
 			onEditStep = { idx, newStep -> viewModel.editStep(idx, newStep) }, // Pass this!
 			onMoveStep = { from, to -> viewModel.moveStep(from, to) },         // Pass this!
 			onNext = { viewModel.nextStep() },
+			onBack = { viewModel.prevStep() }
+		)
+
+		EditorStep.Preview -> RecipePreview(
+			state = state,
+			onEditStep = { viewModel.goToStep(it) },
+			onSaveDraft = { /* TODO: implement save */ },
+			onPublish = { /* TODO: implement publish */ },
 			onBack = { viewModel.prevStep() }
 		)
 

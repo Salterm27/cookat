@@ -48,7 +48,7 @@ class RecipeEditorViewModel : ViewModel() {
 		_uiState.update { it.copy(currentStep = EditorStep.values()[it.currentStep.ordinal - 1]) }
 	}
 
-	fun goTo(step: EditorStep) {
+	fun goToStep(step: EditorStep) {
 		_uiState.update { it.copy(currentStep = step) }
 	}
 

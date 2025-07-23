@@ -51,6 +51,9 @@ interface BackendEndpoints {
 	@GET("recipes/{id}")
 	suspend fun getRecipeById(@Path("id") id: String): RecipeDto
 
+	@POST("recipes/{id}")
+	suspend fun postNewRecipe(@Path("id") id: String): RecipeDto
+
 	@POST("/auth/request-reset")
 	suspend fun requestPasswordReset(@Body body: Map<String, String>): Response<Unit>
 
