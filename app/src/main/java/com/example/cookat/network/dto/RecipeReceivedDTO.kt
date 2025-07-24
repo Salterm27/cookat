@@ -26,5 +26,6 @@ data class RecipeReceivedDTO(
 	@SerializedName("recipe_ingredients")
 	val ingredients: List<IngredientModel>?,
 	val steps: List<StepModel>?,
-	val state: String?
+	val state: String?,
+	val isfav: Boolean
 )

@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 class RecipeViewModel(
 	private val repository: RecipeRepository,
 	private val recipeId: String,
-	private val isFavourite: Boolean
 
 ) : ViewModel() {
 
@@ -21,13 +20,13 @@ class RecipeViewModel(
 		private set
 
 	init {
-		loadRecipe(recipeId, isFavourite = false)
+		loadRecipe(recipeId)
 	}
 
-	fun loadRecipe(recipeId: String, isFavourite: Boolean) {
+	fun loadRecipe(recipeId: String, ) {
 		viewModelScope.launch {
 			uiState = uiState.copy(isLoading = true)
-			uiState = uiState.copy(isFav = isFavourite)
+
 
 			val result = repository.getRecipeById(recipeId)
 			Log.d("RecipeViewModel", "Loaded recipe: $result")

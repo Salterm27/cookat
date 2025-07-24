@@ -43,7 +43,7 @@ fun HomeContent(
 			RecipeCard(
 				recipe = recipe,
 				onClick = {
-					navController.navigate("recipe/${recipe.id}/${recipe.isFavourite}")
+					navController.navigate("recipe/${recipe.id}")
 				},
 				onToggleFavorite = { isFav ->
 					onToggleFavorite(recipe.id, isFav)

@@ -36,11 +36,14 @@ fun RecipeDetailsContent(
 				}
 			)
 		},
+
 		floatingActionButton = {
-			RecipeActions(
-				state = state,
-				onToggleFavorite = onToggleFavorite
-			)
+			if (state.recipe != null && !state.isLoading && state.errorMessage == null) {
+				RecipeActions(
+					state = state,
+					onToggleFavorite = onToggleFavorite
+				)
+			}
 		}
 	) { padding ->
 		when {

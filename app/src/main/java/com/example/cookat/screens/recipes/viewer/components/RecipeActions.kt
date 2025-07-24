@@ -22,6 +22,7 @@ fun RecipeActions(
 	state: RecipeUiState,
 	onToggleFavorite: () -> Unit
 ) {
+
 	Column(
 		verticalArrangement = Arrangement.spacedBy(12.dp),
 		horizontalAlignment = Alignment.End,
@@ -32,8 +33,8 @@ fun RecipeActions(
 			shape = MaterialTheme.shapes.medium
 		) {
 			Icon(
-				imageVector = if (state.isFav) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-				contentDescription = if (state.isFav) "Remove favorite" else "Add favorite"
+				imageVector = if (state.recipe?.isFavourite == true) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+				contentDescription = if (state.recipe?.isFavourite == true) "Remove favorite" else "Add favorite"
 			)
 		}
 		FloatingActionButton(onClick = { /* TODO */ }) {

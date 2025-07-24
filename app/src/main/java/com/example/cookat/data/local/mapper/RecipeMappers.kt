@@ -50,7 +50,7 @@ fun RecipeModel.toEntity() = RecipeEntity(
 
 // === Received DTO -> Entity ===
 
-fun RecipeReceivedDTO.toEntity(isFavourite: Boolean = false) = RecipeEntity(
+fun RecipeReceivedDTO.toEntity() = RecipeEntity(
 	id = id,
 	userID = userID,
 	username = username,
@@ -62,7 +62,7 @@ fun RecipeReceivedDTO.toEntity(isFavourite: Boolean = false) = RecipeEntity(
 	type = type,
 	editedDate = editedDate,
 	rating = rating,
-	isFavourite = isFavourite,
+	isFavourite = isfav,
 	ingredients = ingredients,
 	steps = steps,
 	state = state
@@ -70,7 +70,7 @@ fun RecipeReceivedDTO.toEntity(isFavourite: Boolean = false) = RecipeEntity(
 
 // === Received DTO -> Model ===
 
-fun RecipeReceivedDTO.toModel(isFavourite: Boolean = false) = RecipeModel(
+fun RecipeReceivedDTO.toModel() = RecipeModel(
 	id = id,
 	userID = userID,
 	username = username,
@@ -82,7 +82,7 @@ fun RecipeReceivedDTO.toModel(isFavourite: Boolean = false) = RecipeModel(
 	type = type,
 	editedDate = editedDate,
 	rating = rating,
-	isFavourite = isFavourite,
+	isFavourite = isfav,
 	ingredients = ingredients,
 	steps = steps,
 	state = state

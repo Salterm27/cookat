@@ -15,11 +15,11 @@ class RecipeRepository(context: Context) {
 	private val api = BackendClient.create(context)
 	private val dao = RecipeDB.getDatabase(context).recipeDao()
 
-	suspend fun getRecipeById(id: String, isFavourite: Boolean = false): Result<RecipeModel> {
+	suspend fun getRecipeById(id: String): Result<RecipeModel> {
 		return withContext(Dispatchers.IO) {
 			try {
 				val remote = api.getRecipeById(id)
-				dao.insert(remote.toEntity(isFavourite))
+				dao.insert(remote.toEntity())
 				Result.success(remote.toModel())
 
 			} catch (e: Exception) {
