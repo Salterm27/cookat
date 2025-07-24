@@ -1,6 +1,5 @@
 package com.example.cookat
 
-import RecipeEditor
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,6 +28,7 @@ import com.example.cookat.screens.auth.RegisterScreen
 import com.example.cookat.screens.auth.ResetPasswordScreen
 import com.example.cookat.screens.auth.ValidatePasswordScreen
 import com.example.cookat.screens.home.HomeScreen
+import com.example.cookat.screens.recipes.editor.RecipeEditor
 import com.example.cookat.screens.recipes.viewer.RecipeDetails
 import com.example.cookat.screens.settings.MySettings
 import com.example.cookat.ui.theme.CookatTheme

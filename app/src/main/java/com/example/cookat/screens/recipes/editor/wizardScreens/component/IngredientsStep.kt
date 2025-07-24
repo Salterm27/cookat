@@ -1,4 +1,4 @@
-package com.example.cookat.screens.recipes.editor.wizardScreens
+package com.example.cookat.screens.recipes.editor.wizardScreens.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

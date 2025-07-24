@@ -1,11 +1,12 @@
-import androidx.compose.material3.Text
+package com.example.cookat.screens.recipes.editor
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cookat.models.uiStates.EditorStep
-import com.example.cookat.screens.recipes.editor.wizardScreens.DescriptionStep
-import com.example.cookat.screens.recipes.editor.wizardScreens.IngredientsStep
+import com.example.cookat.screens.recipes.editor.wizardScreens.component.DescriptionStep
+import com.example.cookat.screens.recipes.editor.wizardScreens.component.IngredientsStep
 import com.example.cookat.screens.recipes.editor.wizardScreens.component.ServingsStep
 import com.example.cookat.screens.recipes.editor.wizardScreens.component.StepsStep
 import com.example.cookat.screens.recipes.preview.RecipePreview
@@ -14,8 +15,8 @@ import com.example.cookat.viewmodels.recipes.RecipeEditorViewModel
 @Composable
 fun RecipeEditor(
 	recipeName: String,
-	onFinish: () -> Unit,
 	onCancel: () -> Unit,
+	onFinish: () -> Unit,
 	viewModel: RecipeEditorViewModel = viewModel()
 ) {
 	val state by viewModel.uiState.collectAsState()
@@ -62,6 +63,5 @@ fun RecipeEditor(
 			onBack = { viewModel.prevStep() }
 		)
 
-		else -> Text("Step not implemented yet.")
 	}
 }
