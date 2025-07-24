@@ -14,23 +14,26 @@ class RecipeViewModel(
 	private val repository: RecipeRepository,
 	private val recipeId: String,
 	private val isFavourite: Boolean
+
 ) : ViewModel() {
 
 	var uiState by mutableStateOf(RecipeUiState())
 		private set
 
 	init {
-		loadRecipe(recipeId, isFavourite)
+		loadRecipe(recipeId, isFavourite = false)
 	}
 
-	fun loadRecipe(recipeId: String, isFavourite: Boolean = false) {
+	fun loadRecipe(recipeId: String, isFavourite: Boolean) {
 		viewModelScope.launch {
 			uiState = uiState.copy(isLoading = true)
+			uiState = uiState.copy(isFav = isFavourite)
 
-			val result = repository.getRecipeById(recipeId, isFavourite)
+			val result = repository.getRecipeById(recipeId)
 			Log.d("RecipeViewModel", "Loaded recipe: $result")
 			uiState = if (result.isSuccess) {
 				uiState.copy(isLoading = false, recipe = result.getOrNull())
+
 			} else {
 				uiState.copy(isLoading = false, errorMessage = result.exceptionOrNull()?.message)
 			}

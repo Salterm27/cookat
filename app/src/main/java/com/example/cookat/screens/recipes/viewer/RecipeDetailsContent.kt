@@ -23,7 +23,7 @@ import com.example.cookat.screens.recipes.viewer.components.RecipeActions
 fun RecipeDetailsContent(
 	state: RecipeUiState,
 	onBack: () -> Unit,
-	onToggleFavorite: () -> Unit
+	onToggleFavorite: () -> Unit,
 ) {
 	Scaffold(
 		topBar = {
@@ -38,7 +38,7 @@ fun RecipeDetailsContent(
 		},
 		floatingActionButton = {
 			RecipeActions(
-				isFavorite = state.recipe?.isFavourite ?: false,
+				state = state,
 				onToggleFavorite = onToggleFavorite
 			)
 		}

@@ -15,10 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.cookat.models.uiStates.RecipeUiState
 
 @Composable
 fun RecipeActions(
-	isFavorite: Boolean,
+	state: RecipeUiState,
 	onToggleFavorite: () -> Unit
 ) {
 	Column(
@@ -31,8 +32,8 @@ fun RecipeActions(
 			shape = MaterialTheme.shapes.medium
 		) {
 			Icon(
-				imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-				contentDescription = if (isFavorite) "Remove favorite" else "Add favorite"
+				imageVector = if (state.isFav) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+				contentDescription = if (state.isFav) "Remove favorite" else "Add favorite"
 			)
 		}
 		FloatingActionButton(onClick = { /* TODO */ }) {

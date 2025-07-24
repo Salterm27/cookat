@@ -35,6 +35,6 @@ fun RecipeDetails(
 	RecipeDetailsContent(
 		state = state,
 		onBack = { navController.navigateUp() },
-		onToggleFavorite = { viewModel.toggleFavourite() }
+		onToggleFavorite = { viewModel.toggleFavourite() },
 	)
 }
