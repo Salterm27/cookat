@@ -150,7 +150,8 @@ fun AppNavigation() {
 		composable("profile") {
 			ProfileScreen(
 				onNavigateTo = { navController.navigate("home") },
-				onNavigateBack = { navController.navigate("home") }
+				onNavigateBack = { navController.navigate("home") },
+				onLogout = {navController.navigate("login")}
 			)
 		}
 

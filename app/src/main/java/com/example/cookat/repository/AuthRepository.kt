@@ -16,7 +16,7 @@ class AuthRepository(
 ) {
 
 	private val auth = SupabaseClient.client.auth
-	private val backendApi = BackendClient.create(context) // ✅ usa el mismo cliente que todo el backend
+	private val backendApi = BackendClient.create(context)
 
 	suspend fun requestPasswordReset(email: String): Result<Unit> {
 		return try {
@@ -72,7 +72,7 @@ class AuthRepository(
 			val accessToken = auth.currentSessionOrNull()?.accessToken
 			if (accessToken != null) {
 				sessionManager.saveAccessToken(accessToken)
-				println("✅ Bearer token saved: $accessToken")
+				println("Bearer token saved: $accessToken")
 			}
 
 			Result.success(Unit)
@@ -96,7 +96,6 @@ class AuthRepository(
 				this.password = password
 			}
 
-			// 🔑 Login immediately to get token & user ID
 			auth.signInWith(Email) {
 				this.email = email
 				this.password = password
@@ -105,7 +104,7 @@ class AuthRepository(
 			val accessToken = auth.currentSessionOrNull()?.accessToken
 			if (accessToken != null) {
 				sessionManager.saveAccessToken(accessToken)
-				println("✅ Bearer token after signUp: $accessToken")
+				println("Bearer token after signUp: $accessToken")
 			}
 
 			val userId = getUserId()
@@ -125,7 +124,6 @@ class AuthRepository(
 		}
 	}
 
-	// ✅ Log out from Supabase & clear local token
 	suspend fun logout() {
 		auth.signOut()
 		sessionManager.clearAccessToken()

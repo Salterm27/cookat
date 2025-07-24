@@ -33,7 +33,8 @@ import com.example.cookat.viewmodels.profile.ProfileViewModel
 fun MyProfile(
 	viewModel: ProfileViewModel,
 	onNavigateBack: () -> Unit,
-	onNavigateTo: () -> Unit
+	onNavigateTo: () -> Unit,
+	onLogout: () -> Unit
 ) {
 	val uiState by viewModel.uiState.collectAsState()
 
@@ -43,7 +44,7 @@ fun MyProfile(
 				title = { Text("Perfil") },
 				navigationIcon = {
 					IconButton(onClick = onNavigateBack) {
-						Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Atras")
+						Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Atrás")
 					}
 				}
 			)
@@ -84,7 +85,15 @@ fun MyProfile(
 				}
 			}
 
+			Spacer(modifier = Modifier.height(24.dp))
+
+			
+			Button(onClick = onLogout) {
+				Text("Cerrar sesión")
+			}
+
 			uiState.error?.let {
+				Spacer(modifier = Modifier.height(12.dp))
 				Text("Error: $it", color = MaterialTheme.colorScheme.error)
 			}
 		}
@@ -94,10 +103,10 @@ fun MyProfile(
 		AlertDialog(
 			onDismissRequest = viewModel::dismissDialog,
 			title = { Text("Confirmacion de Cambios") },
-			text = { Text("Estas seguro que queres actualizar tu perfil? Este cambio no puede deshacerse.") },
+			text = { Text("¿Estás seguro que quieres actualizar tu perfil? Este cambio no puede deshacerse.") },
 			confirmButton = {
 				TextButton(onClick = { viewModel.confirmUpdate(onNavigateTo) }) {
-					Text("Si")
+					Text("Sí")
 				}
 			},
 			dismissButton = {

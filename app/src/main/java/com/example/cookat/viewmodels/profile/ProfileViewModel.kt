@@ -3,6 +3,7 @@ package com.example.cookat.viewmodels.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cookat.models.uiStates.ProfileUiState
+import com.example.cookat.repository.AuthRepository
 import com.example.cookat.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,7 +11,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
-	private val userRepository: UserRepository
+	private val userRepository: UserRepository,
+	private val authRepository: AuthRepository
 ) : ViewModel() {
 
 	private val _uiState = MutableStateFlow(ProfileUiState())
@@ -108,6 +110,19 @@ class ProfileViewModel(
 					error = e.message ?: "Unknown error",
 					isLoading = false
 				)
+			}
+		}
+	}
+
+	fun logout(onLoggedOut: () -> Unit) {
+		viewModelScope.launch {
+			try {
+				authRepository.logout()
+				onLoggedOut()
+			} catch (e: Exception) {
+				_uiState.update {
+					it.copy(error = e.message ?: "Error al cerrar sesión")
+				}
 			}
 		}
 	}

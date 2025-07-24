@@ -13,24 +13,35 @@ import com.example.cookat.viewmodels.profile.ProfileViewModel
 @Composable
 fun ProfileScreen(
 	onNavigateBack: () -> Unit,
-	onNavigateTo: () -> Unit
+	onNavigateTo: () -> Unit,
+	onLogout: () -> Unit
 ) {
 	val context = LocalContext.current
+
+	val sessionManager = remember { SessionManager(context) }
 
 	val userRepository = remember {
 		UserRepository(
 			backendApi = BackendClient.create(context),
-			sessionManager = SessionManager(context)
+			sessionManager = sessionManager
+		)
+	}
+
+	val authRepository = remember {
+		com.example.cookat.repository.AuthRepository(
+			sessionManager = sessionManager,
+			context = context
 		)
 	}
 
 	val viewModel: ProfileViewModel = viewModel(
-		factory = UserModelFactory(userRepository)
+		factory = UserModelFactory(userRepository, authRepository)
 	)
 
 	MyProfile(
 		viewModel = viewModel,
 		onNavigateBack = onNavigateBack,
-		onNavigateTo = onNavigateTo
+		onNavigateTo = onNavigateTo,
+		onLogout = onLogout
 	)
 }
