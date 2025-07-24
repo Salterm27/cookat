@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.cookat.data.local.session.SessionManager
+import com.example.cookat.data.remote.SupabaseClient
 import com.example.cookat.models.dbModels.users.ProfileScreen
 import com.example.cookat.network.BackendClient
 import com.example.cookat.repository.AuthRepository
@@ -34,6 +35,8 @@ import com.example.cookat.ui.theme.CookatTheme
 import com.example.cookat.viewmodels.auth.LoginViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +78,10 @@ fun AppNavigation() {
 			val sessionManager = remember { SessionManager(context) }
 
 			LaunchedEffect(Unit) {
-				if (sessionManager.isLoggedIn()) {
+				val supabase = SupabaseClient.client
+				val validToken = sessionManager.getValidAccessToken(supabase)
+
+				if (validToken != null) {
 					navController.navigate("home") {
 						popUpTo("start") { inclusive = true }
 					}
@@ -86,6 +92,8 @@ fun AppNavigation() {
 				}
 			}
 		}
+
+
 
 		composable("login") {
 			val viewModel: LoginViewModel = viewModel(
@@ -146,10 +154,6 @@ fun AppNavigation() {
 			)
 		}
 
-		composable("newRecipe") {
-			RecipeEditor(onNavigateTo = { navController.navigate("home") })
-		}
-
 		composable(
 			"recipe/{id}",
 			arguments = listOf(navArgument("id") { type = NavType.StringType })
@@ -160,6 +164,21 @@ fun AppNavigation() {
 
 		composable("settings") {
 			MySettings(onNavigateTo = { navController.navigate("home") })
+		}
+
+		composable(
+			"recipe_editor/{recipeName}",
+			arguments = listOf(navArgument("recipeName") { type = NavType.StringType })
+		) { backStackEntry ->
+			// decode to support spaces and special chars
+			val recipeName = backStackEntry.arguments?.getString("recipeName")?.let {
+				URLDecoder.decode(it, StandardCharsets.UTF_8.name())
+			} ?: ""
+			RecipeEditor(
+				recipeName = recipeName,
+				onFinish = { navController.navigate("home") },   // After final step
+				onCancel = { navController.popBackStack() }      // If user cancels editing
+			)
 		}
 	}
 }

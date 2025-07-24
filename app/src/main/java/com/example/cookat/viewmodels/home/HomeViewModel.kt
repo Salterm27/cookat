@@ -11,6 +11,7 @@ import com.example.cookat.models.uiStates.HomeUiState
 import com.example.cookat.models.uiStates.RecipeFilter
 import com.example.cookat.repository.HomeRepository
 import kotlinx.coroutines.launch
+import java.util.Locale.getDefault
 
 class HomeViewModel(context: Context) : ViewModel() {
 	private val repository = HomeRepository(context)
@@ -92,15 +93,60 @@ class HomeViewModel(context: Context) : ViewModel() {
 	fun submitNewRecipeName() {
 		val name = uiState.pendingRecipeName.trim()
 		if (name.isEmpty()) {
-			uiState = uiState.copy(recipeNameError = "Name cannot be empty")
+			uiState = uiState.copy(recipeNameError = "La receta necesita un titulo")
 			return
 		}
 
 		viewModelScope.launch {
 			uiState = uiState.copy(isCheckingRecipeName = true)
-			val exists = repository.recipeExistsRemotely(name)
-			Log.d("HomeViewModel", "Recipe Exists: $exists")
-			uiState = if (exists) {
+			Log.d("HomeViewModel", "Checking recipe name: $name")
+
+			val result = repository.recipeExistsRemotely(name)
+			Log.d("HomeViewModel", "Recipe name check result: $result")
+
+			uiState = when {
+				result.isSuccess && result.getOrNull() == true -> {
+					// 200: exists
+					uiState.copy(
+						isCheckingRecipeName = false,
+						showNewRecipeDialog = false,
+						showNameExistsDialog = true
+					)
+				}
+
+				result.isSuccess && result.getOrNull() == false -> {
+					// 404: does not exist
+					uiState.copy(
+						isCheckingRecipeName = false,
+						showNewRecipeDialog = false,
+						navigateToRecipeEditor = name
+					)
+				}
+
+				else -> {
+					// Any other error
+					uiState.copy(
+						isCheckingRecipeName = false,
+						showNewRecipeDialog = false,
+						errorMessage = "No pudimos validar el nombre de la receta. Intentalo otra vez."
+					)
+				}
+			}
+		}
+	}
+
+
+	fun fakeSubmitNewRecipeName() {
+		val name = uiState.pendingRecipeName.trim()
+		if (name.isEmpty()) {
+			uiState = uiState.copy(recipeNameError = "La receta necesita un titulo")
+			return
+		}
+
+		viewModelScope.launch {
+			val fakeExists = name.lowercase(getDefault()) == "tortilla"
+
+			uiState = if (fakeExists) {
 				uiState.copy(
 					isCheckingRecipeName = false,
 					showNewRecipeDialog = false,
@@ -113,6 +159,7 @@ class HomeViewModel(context: Context) : ViewModel() {
 					navigateToRecipeEditor = name
 				)
 			}
+
 		}
 	}
 
@@ -127,16 +174,9 @@ class HomeViewModel(context: Context) : ViewModel() {
 	fun onModifyRecipe() { /* your logic here */
 	}
 
-	fun onCreateWithAnotherName() {
-		uiState = uiState.copy(
-			showNameExistsDialog = false,
-			showNewRecipeDialog = true,
-			pendingRecipeName = ""
-		)
-	}
-
 	fun onNavigatedToRecipeEditor() {
 		uiState = uiState.copy(navigateToRecipeEditor = null)
 	}
+
 
 }

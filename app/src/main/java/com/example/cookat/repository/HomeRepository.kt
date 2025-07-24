@@ -51,11 +51,17 @@ class HomeRepository(context: Context) {
 		if (newState) api.addFavourite(recipeId) else api.removeFavourite(recipeId)
 	}
 
-	suspend fun recipeExistsRemotely(name: String): Boolean {
+	suspend fun recipeExistsRemotely(name: String): Result<Boolean> {
 		return try {
-			api.checkNewRecipeName(name)
+			val response =
+				api.checkNewRecipeName(name) // Use a function that gives you the full HTTP response, not just parsed result
+			when (response.code()) {
+				200 -> Result.success(true)
+				404 -> Result.success(false)
+				else -> Result.failure(Exception("Unexpected response: ${response.code()}"))
+			}
 		} catch (e: Exception) {
-			false
+			Result.failure(e)
 		}
 	}
 }

@@ -1,31 +1,67 @@
 package com.example.cookat.screens.recipes.editor
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.cookat.models.uiStates.EditorStep
+import com.example.cookat.screens.recipes.editor.wizardScreens.component.DescriptionStep
+import com.example.cookat.screens.recipes.editor.wizardScreens.component.IngredientsStep
+import com.example.cookat.screens.recipes.editor.wizardScreens.component.ServingsStep
+import com.example.cookat.screens.recipes.editor.wizardScreens.component.StepsStep
+import com.example.cookat.screens.recipes.preview.RecipePreview
+import com.example.cookat.viewmodels.recipes.RecipeEditorViewModel
 
 @Composable
-fun RecipeEditor(onNavigateTo: () -> Unit) {
-	Scaffold { padding ->
-		Column(
-			modifier = Modifier
-				.padding(padding)
-				.fillMaxSize(),
-			verticalArrangement = Arrangement.Center,
-			horizontalAlignment = Alignment.CenterHorizontally
-		) {
-			Text(text = "New recipe page")
-			Button(onClick = onNavigateTo) {
-				Text("Submit")
-			}
-		}
+fun RecipeEditor(
+	recipeName: String,
+	onCancel: () -> Unit,
+	onFinish: () -> Unit,
+	viewModel: RecipeEditorViewModel = viewModel()
+) {
+	val state by viewModel.uiState.collectAsState()
+
+	when (state.currentStep) {
+		EditorStep.Description -> DescriptionStep(
+			recipeName = recipeName,
+			description = state.description,
+			onDescriptionChange = { viewModel.setDescription(it) },
+			onNext = { viewModel.nextStep() },
+			onCancel = onCancel
+		)
+
+		EditorStep.Ingredients -> IngredientsStep(
+			ingredients = state.ingredients,
+			onAddIngredient = { name, qty, unit -> viewModel.addIngredient(name, qty, unit) },
+			onRemoveIngredient = { idx -> viewModel.removeIngredient(idx) },
+			onNext = { viewModel.nextStep() },
+			onBack = { viewModel.prevStep() }
+		)
+
+		EditorStep.Servings -> ServingsStep(
+			servings = state.servings,
+			onServingsChange = { viewModel.setServings(it) },
+			onNext = { viewModel.nextStep() },
+			onBack = { viewModel.prevStep() }
+		)
+
+		EditorStep.Steps -> StepsStep(
+			steps = state.steps,
+			onAddStep = { viewModel.addStep(it) },
+			onRemoveStep = { viewModel.removeStep(it) },
+			onEditStep = { idx, newStep -> viewModel.editStep(idx, newStep) }, // Pass this!
+			onMoveStep = { from, to -> viewModel.moveStep(from, to) },         // Pass this!
+			onNext = { viewModel.nextStep() },
+			onBack = { viewModel.prevStep() }
+		)
+
+		EditorStep.Preview -> RecipePreview(
+			state = state,
+			onEditStep = { viewModel.goToStep(it) },
+			onSaveDraft = { /* TODO: implement save */ },
+			onPublish = { /* TODO: implement publish */ },
+			onBack = { viewModel.prevStep() }
+		)
+
 	}
 }

@@ -25,9 +25,10 @@ fun HomeDialogs(
 	if (state.showNameExistsDialog) {
 		RecipeExistsDialog(
 			name = state.pendingRecipeName,
+			onNameChange = { viewModel.onRecipeNameChange(it) },
 			onReplace = { viewModel.onReplaceRecipe() },
 			onModify = { viewModel.onModifyRecipe() },
-			onCreate = { viewModel.onCreateWithAnotherName() },
+			onTryAgain = { viewModel.submitNewRecipeName() },
 			onDismiss = { viewModel.hideNameExistsDialog() }
 		)
 	}
