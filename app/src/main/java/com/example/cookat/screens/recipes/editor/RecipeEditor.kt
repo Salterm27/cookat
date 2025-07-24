@@ -60,11 +60,10 @@ fun RecipeEditor(
 
 		EditorStep.Preview -> RecipePreview(
 			state = state,
+			viewModel = viewModel,
 			onEditStep = { viewModel.goToStep(it) },
-			onSaveDraft = { /* TODO: implement save */ },
-			onPublish = { /* TODO: implement publish */ },
+			onSaved = onFinish,
 			onBack = { viewModel.prevStep() }
 		)
-
 	}
 }

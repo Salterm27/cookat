@@ -1,18 +1,24 @@
 package com.example.cookat.viewmodels.recipes
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.cookat.data.local.mapper.toRecipeSentDto
 import com.example.cookat.models.uiStates.EditorStep
 import com.example.cookat.models.uiStates.Ingredient
 import com.example.cookat.models.uiStates.RecipeEditorUiState
 import com.example.cookat.models.uiStates.UnitOfMeasure
+import com.example.cookat.repository.RecipeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 
 class RecipeEditorViewModel : ViewModel() {
 	private val _uiState = MutableStateFlow(RecipeEditorUiState())
 	val uiState: StateFlow<RecipeEditorUiState> = _uiState
+
 
 	fun initialize(name: String) {
 		_uiState.update {
@@ -77,4 +83,20 @@ class RecipeEditorViewModel : ViewModel() {
 		}
 	}
 
+	fun submitRecipe(
+		context: Context,
+		state: String, // "Draft" or "Review"
+		onResult: (Boolean, String?) -> Unit
+	) {
+		val dto = uiState.value.toRecipeSentDto(type = "Salado", state = state)
+		val repo = RecipeRepository(context.applicationContext)
+		viewModelScope.launch {
+			try {
+				repo.submitRecipe(dto)
+				onResult(true, null)
+			} catch (e: Exception) {
+				onResult(false, e.message)
+			}
+		}
+	}
 }

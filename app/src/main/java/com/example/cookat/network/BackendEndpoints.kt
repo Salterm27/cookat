@@ -3,7 +3,8 @@ package com.example.cookat.network
 import com.example.cookat.models.dbModels.recipes.RecipeModel
 import com.example.cookat.models.dbModels.recipes.RecipesWrapper
 import com.example.cookat.models.dbModels.users.UserModel
-import com.example.cookat.network.dto.RecipeDto
+import com.example.cookat.network.dto.RecipeReceivedDTO
+import com.example.cookat.network.dto.RecipeSentDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -24,11 +25,11 @@ interface BackendEndpoints {
 		@Query("page") page: Int = 1
 	): RecipesWrapper
 
+	@POST("recipes")
+	suspend fun createRecipe(@Body recipe: RecipeSentDto): Response<Unit>
+
 	@GET("favourites")
 	suspend fun getFavourites(): List<String>
-
-	@POST("recipes")
-	suspend fun createRecipe(@Body recipe: RecipeModel): RecipeModel
 
 	@POST("favourites/{recipeId}")
 	suspend fun addFavourite(@Path("recipeId") recipeId: String)
@@ -49,7 +50,7 @@ interface BackendEndpoints {
 	suspend fun deleteUser(): Unit
 
 	@GET("recipes/{id}")
-	suspend fun getRecipeById(@Path("id") id: String): RecipeDto
+	suspend fun getRecipeById(@Path("id") id: String): RecipeReceivedDTO
 /*
 	@POST("recipes/{id}")
 	suspend fun postNewRecipe(@Path("id") id: String): RecipeDto

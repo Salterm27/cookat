@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import com.example.cookat.data.local.converters.Converters
 import com.example.cookat.data.local.entities.RecipeEntity
 
-@Database(entities = [RecipeEntity::class], version = 7)
+@Database(entities = [RecipeEntity::class], version = 8)
 @TypeConverters(Converters::class)
 abstract class RecipeDB : RoomDatabase() {
 	abstract fun recipeDao(): RecipeDAO

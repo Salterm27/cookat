@@ -20,5 +20,7 @@ data class RecipeEntity(
 	val rating: Double,
 	val isFavourite: Boolean = false,
 	val ingredients: List<IngredientModel>?,
-	val steps: List<StepModel>?
+	val steps: List<StepModel>?,
+	val state: String?
+
 )

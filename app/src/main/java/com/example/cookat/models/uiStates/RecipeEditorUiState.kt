@@ -8,6 +8,9 @@ enum class UnitOfMeasure(val display: String) {
 	L("L"), ML("ml"), KG("Kg"), G("g"), UN("Un"), TSP("tsp"), TBSP("tbsp")
 }
 
+enum class State() {
+	Draft, Review
+}
 data class Ingredient(
 	val name: String,
 	val quantity: Double,

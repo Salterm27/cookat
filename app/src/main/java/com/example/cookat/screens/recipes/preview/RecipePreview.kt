@@ -1,35 +1,28 @@
 package com.example.cookat.screens.recipes.preview
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cookat.models.uiStates.EditorStep
 import com.example.cookat.models.uiStates.RecipeEditorUiState
+import com.example.cookat.viewmodels.recipes.RecipeEditorViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipePreview(
 	state: RecipeEditorUiState,
+	viewModel: RecipeEditorViewModel,
 	onEditStep: (EditorStep) -> Unit,
-	onSaveDraft: () -> Unit,
-	onPublish: () -> Unit,
-	onBack: () -> Unit
+	onSaved: () -> Unit,
+	onBack:() -> Unit
 ) {
+	val context = LocalContext.current
+	var feedback by remember { mutableStateOf<String?>(null) }
+
 	Scaffold(
 		topBar = {
 			TopAppBar(
@@ -38,9 +31,38 @@ fun RecipePreview(
 			)
 		},
 		bottomBar = {
-			Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
-				Button(onClick = onSaveDraft) { Text("Guardar borrador") }
-				Button(onClick = onPublish, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) { Text("Publicar") }
+			Row(
+				Modifier
+					.fillMaxWidth()
+					.padding(16.dp),
+				horizontalArrangement = Arrangement.SpaceEvenly
+			) {
+				Button(
+					onClick = {
+						viewModel.submitRecipe(context, "Draft") { success, error ->
+							feedback = if (success) {
+								onSaved()
+								"Receta guardada como borrador"
+							} else {
+								error ?: "Hubo un error al guardar"
+							}
+						}
+					},
+					colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+				) { Text("Guardar borrador") }
+
+				Button(
+					onClick = {
+						viewModel.submitRecipe(context, "Review") { success, error ->
+							feedback = if (success) {
+								onSaved()
+								"¡Receta enviada a revisión!"
+							} else {
+								error ?: "No se pudo enviar a revisión"
+							}
+						}
+					}
+				) { Text("Publicar") }
 			}
 		}
 	) { padding ->
@@ -49,10 +71,17 @@ fun RecipePreview(
 				.padding(padding)
 				.padding(horizontal = 16.dp, vertical = 8.dp)
 		) {
+			feedback?.let {
+				Text(
+					text = it,
+					color = MaterialTheme.colorScheme.primary,
+					modifier = Modifier.padding(vertical = 8.dp)
+				)
+			}
 			// Title & Description
 			SectionHeader(title = "Título y descripción", onEdit = { onEditStep(EditorStep.Description) })
-			Text(text = state.name)
-			Text(state.description)
+			Text(text = state.name, style = MaterialTheme.typography.titleMedium)
+			Text(state.description, style = MaterialTheme.typography.bodyMedium)
 			Spacer(Modifier.height(20.dp))
 
 			// Ingredients
@@ -75,7 +104,6 @@ fun RecipePreview(
 		}
 	}
 }
-
 
 @Composable
 fun SectionHeader(title: String, onEdit: () -> Unit) {

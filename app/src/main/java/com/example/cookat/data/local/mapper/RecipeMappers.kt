@@ -1,8 +1,12 @@
 package com.example.cookat.data.local.mapper
 
 import com.example.cookat.data.local.entities.RecipeEntity
+import com.example.cookat.models.dbModels.recipes.IngredientModel
 import com.example.cookat.models.dbModels.recipes.RecipeModel
-import com.example.cookat.network.dto.RecipeDto
+import com.example.cookat.models.dbModels.recipes.StepModel
+import com.example.cookat.models.uiStates.RecipeEditorUiState
+import com.example.cookat.network.dto.RecipeReceivedDTO
+import com.example.cookat.network.dto.RecipeSentDto
 
 // === Entity <-> Model ===
 
@@ -20,7 +24,8 @@ fun RecipeEntity.toModel() = RecipeModel(
 	rating = rating,
 	isFavourite = isFavourite,
 	ingredients = ingredients,
-	steps = steps
+	steps = steps,
+	state = state
 
 )
 
@@ -38,12 +43,14 @@ fun RecipeModel.toEntity() = RecipeEntity(
 	rating = rating,
 	isFavourite = isFavourite,
 	ingredients = ingredients,
-	steps = steps
+	steps = steps,
+	state = state
+
 )
 
-// === DTO -> Entity ===
+// === Received DTO -> Entity ===
 
-fun RecipeDto.toEntity(isFavourite: Boolean = false) = RecipeEntity(
+fun RecipeReceivedDTO.toEntity(isFavourite: Boolean = false) = RecipeEntity(
 	id = id,
 	userID = userID,
 	username = username,
@@ -57,12 +64,13 @@ fun RecipeDto.toEntity(isFavourite: Boolean = false) = RecipeEntity(
 	rating = rating,
 	isFavourite = isFavourite,
 	ingredients = ingredients,
-	steps = steps
+	steps = steps,
+	state = state
 )
 
-// === DTO -> Model ===
+// === Received DTO -> Model ===
 
-fun RecipeDto.toModel(isFavourite: Boolean = false) = RecipeModel(
+fun RecipeReceivedDTO.toModel(isFavourite: Boolean = false) = RecipeModel(
 	id = id,
 	userID = userID,
 	username = username,
@@ -76,5 +84,35 @@ fun RecipeDto.toModel(isFavourite: Boolean = false) = RecipeModel(
 	rating = rating,
 	isFavourite = isFavourite,
 	ingredients = ingredients,
-	steps = steps
+	steps = steps,
+	state = state
 )
+
+// EditorUiState -> RecipeSentDto --
+fun RecipeEditorUiState.toRecipeSentDto(
+	type: String = "Salado",    // or pass this as a param
+	state: String = "Draft"   // or "Review"
+): RecipeSentDto {
+	return RecipeSentDto(
+		title = name,
+		description = description,
+		portions = servings,
+		ingredients = ingredients.map {
+			IngredientModel(
+				name = it.name,
+				quantity = it.quantity,
+				unit = it.unit?.display ?: ""
+			)
+		},
+		steps = steps.mapIndexed { idx, desc ->
+			StepModel(
+				stepNumber = idx + 1,
+				description = desc,
+				imageUrl = ""
+			)
+		},
+		state = state,
+		type = type
+	)
+}
+

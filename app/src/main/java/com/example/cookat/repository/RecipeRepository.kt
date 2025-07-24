@@ -6,6 +6,7 @@ import com.example.cookat.data.local.mapper.toEntity
 import com.example.cookat.data.local.mapper.toModel
 import com.example.cookat.models.dbModels.recipes.RecipeModel
 import com.example.cookat.network.BackendClient
+import com.example.cookat.network.dto.RecipeSentDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -48,4 +49,18 @@ class RecipeRepository(context: Context) {
 		}
 	}
 
+	suspend fun submitRecipe(dto: RecipeSentDto): Result<Unit> {
+		return withContext(Dispatchers.IO) {
+			try {
+				val response = api.createRecipe(dto)
+				if (response.isSuccessful) {
+					Result.success(Unit)
+				} else {
+					Result.failure(Exception("API error: ${response.code()} ${response.message()}"))
+				}
+			} catch (e: Exception) {
+				Result.failure(e)
+			}
+		}
+	}
 }
