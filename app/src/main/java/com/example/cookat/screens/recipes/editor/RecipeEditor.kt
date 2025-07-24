@@ -1,6 +1,7 @@
 package com.example.cookat.screens.recipes.editor
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -20,7 +21,9 @@ fun RecipeEditor(
 	viewModel: RecipeEditorViewModel = viewModel()
 ) {
 	val state by viewModel.uiState.collectAsState()
-
+	LaunchedEffect(Unit) {
+		viewModel.initialize(recipeName)
+	}
 	when (state.currentStep) {
 		EditorStep.Description -> DescriptionStep(
 			recipeName = recipeName,

@@ -51,6 +51,7 @@ fun RecipePreview(
 		) {
 			// Title & Description
 			SectionHeader(title = "Título y descripción", onEdit = { onEditStep(EditorStep.Description) })
+			Text(text = state.name)
 			Text(state.description)
 			Spacer(Modifier.height(20.dp))
 

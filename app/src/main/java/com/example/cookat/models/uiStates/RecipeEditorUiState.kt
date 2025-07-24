@@ -16,6 +16,7 @@ data class Ingredient(
 
 data class RecipeEditorUiState(
 	val currentStep: EditorStep = EditorStep.Description,
+	val name: String = "",
 	val description: String = "",
 	val ingredients: List<Ingredient> = emptyList(),
 	val servings: Int = 0,

@@ -14,6 +14,11 @@ class RecipeEditorViewModel : ViewModel() {
 	private val _uiState = MutableStateFlow(RecipeEditorUiState())
 	val uiState: StateFlow<RecipeEditorUiState> = _uiState
 
+	fun initialize(name: String) {
+		_uiState.update {
+			if (it.name.isBlank()) it.copy(name = name) else it
+		}
+	}
 	fun setDescription(desc: String) {
 		_uiState.update { it.copy(description = desc) }
 	}
@@ -71,4 +76,5 @@ class RecipeEditorViewModel : ViewModel() {
 			}
 		}
 	}
+
 }
