@@ -12,7 +12,7 @@ data class RecipeModel(
 	val createdAt: String? = null,
 	val editedDate: String? = null,
 	val rating: Double = 0.0,
-	val isFavourite: Boolean = false,
+	val isFavourite: Boolean,
 	val ingredients: List<IngredientModel>? = null,
 	val steps: List<StepModel>? = null,
 	val state: String? = "Draft"
