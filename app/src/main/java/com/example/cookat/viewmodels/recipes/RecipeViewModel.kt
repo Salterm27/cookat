@@ -12,22 +12,22 @@ import kotlinx.coroutines.launch
 
 class RecipeViewModel(
 	private val repository: RecipeRepository,
-	private val recipeId: String
+	private val recipeId: String,
+	private val isFavourite: Boolean
 ) : ViewModel() {
 
 	var uiState by mutableStateOf(RecipeUiState())
 		private set
 
 	init {
-		loadRecipe(recipeId)
-
+		loadRecipe(recipeId, isFavourite)
 	}
 
-	fun loadRecipe(recipeId: String) {
+	fun loadRecipe(recipeId: String, isFavourite: Boolean = false) {
 		viewModelScope.launch {
 			uiState = uiState.copy(isLoading = true)
 
-			val result = repository.getRecipeById(recipeId)
+			val result = repository.getRecipeById(recipeId, isFavourite)
 			Log.d("RecipeViewModel", "Loaded recipe: $result")
 			uiState = if (result.isSuccess) {
 				uiState.copy(isLoading = false, recipe = result.getOrNull())

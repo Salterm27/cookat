@@ -12,7 +12,8 @@ import com.example.cookat.viewmodels.recipes.RecipeViewModel
 @Composable
 fun RecipeDetails(
 	recipeId: String,
-	navController: NavController
+	navController: NavController,
+	isFavourite: Boolean = false,
 ) {
 	val context = LocalContext.current
 	val repository = RecipeRepository(context)
@@ -22,7 +23,7 @@ fun RecipeDetails(
 			override fun <T : ViewModel> create(modelClass: Class<T>): T {
 				if (modelClass.isAssignableFrom(RecipeViewModel::class.java)) {
 					@Suppress("UNCHECKED_CAST")
-					return RecipeViewModel(repository, recipeId) as T
+					return RecipeViewModel(repository, recipeId, isFavourite ) as T
 				}
 				throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
 			}

@@ -155,11 +155,12 @@ fun AppNavigation() {
 		}
 
 		composable(
-			"recipe/{id}",
+			"recipe/{id}/{isFavourite}",
 			arguments = listOf(navArgument("id") { type = NavType.StringType })
 		) { backStackEntry ->
 			val recipeId = backStackEntry.arguments?.getString("id") ?: ""
-			RecipeDetails(recipeId = recipeId, navController = navController)
+			val isFavourite = backStackEntry.arguments?.getString("isFavourite") ?: ""
+			RecipeDetails(recipeId = recipeId, navController = navController, isFavourite = isFavourite.toBoolean())
 		}
 
 		composable("settings") {
