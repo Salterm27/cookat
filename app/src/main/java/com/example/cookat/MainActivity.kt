@@ -6,7 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.cookat.data.local.db.RecipeDB
 import com.example.cookat.data.local.session.SessionManager
 import com.example.cookat.data.remote.SupabaseClient
 import com.example.cookat.models.dbModels.users.ProfileScreen
@@ -99,18 +102,27 @@ fun AppNavigation() {
 			val viewModel: LoginViewModel = viewModel(
 				factory = object : ViewModelProvider.Factory {
 					override fun <T : ViewModel> create(modelClass: Class<T>): T {
-						val sessionManager = SessionManager(context) // ✅ 1. create it!
+						val sessionManager = SessionManager(context)
 						val repo =
-							AuthRepository(sessionManager, context = context) // ✅ 2. pass it in
+							AuthRepository(sessionManager, context = context )
 						return LoginViewModel(repo) as T
 					}
 				}
 			)
+			val coroutineScope = rememberCoroutineScope()
 
 			LogInScreen(
 				viewModel = viewModel,
 				onNavigateToRegister = { navController.navigate("register") },
-				onLoginSuccess = { navController.navigate("home") },
+				onLoginSuccess = { userId ->
+					coroutineScope.launch {
+						val userDb = RecipeDB.getDatabase(context, userId)
+						SessionManager(context).saveUserId(userId)
+						navController.navigate("home") {
+							popUpTo("login") { inclusive = true }
+						}
+					}
+				},
 				onNavigateToPassword = { navController.navigate("forgot_password") }
 			)
 		}
@@ -123,7 +135,26 @@ fun AppNavigation() {
 		}
 
 		composable("home") {
-			HomeScreen(navController)
+			val context = LocalContext.current
+			val navControllerRemembered = rememberNavController()
+			val sessionManager = remember { SessionManager(context) }
+
+			val userIdState = remember { mutableStateOf<String?>(null) }
+
+			// Load userId from DataStore
+			LaunchedEffect(Unit) {
+				userIdState.value = sessionManager.getUserId()
+			}
+
+			val userId = userIdState.value
+
+			if (userId != null) {
+				val userDb = com.example.cookat.data.local.db.RecipeDB.getDatabase(context, userId)
+				HomeScreen(navController = navControllerRemembered, recipeDB = userDb)
+			} else {
+				// Optionally show a loading screen while userId is loading
+				// Or just return, so nothing is rendered yet
+			}
 		}
 
 		composable("forgot_password") {

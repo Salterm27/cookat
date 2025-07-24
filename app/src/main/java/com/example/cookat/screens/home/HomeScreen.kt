@@ -8,6 +8,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -15,26 +16,30 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.cookat.data.local.db.RecipeDB
+import com.example.cookat.network.BackendClient
+import com.example.cookat.repository.HomeRepository
 import com.example.cookat.screens.home.components.HomeContent
 import com.example.cookat.screens.home.components.HomeTopBar
 import com.example.cookat.screens.home.components.dialogs.HomeDialogs
 import com.example.cookat.screens.home.components.sidemenu.DrawerContent
 import com.example.cookat.viewmodels.home.HomeViewModel
+import com.example.cookat.viewmodels.home.HomeViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, recipeDB: RecipeDB) {
 	val context = LocalContext.current
 
-	val viewModel: HomeViewModel = viewModel(factory = object : ViewModelProvider.Factory {
-		override fun <T : ViewModel> create(modelClass: Class<T>): T {
-			if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
-				@Suppress("UNCHECKED_CAST")
-				return HomeViewModel(context.applicationContext) as T
-			}
-			throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
+	val viewModel: HomeViewModel = viewModel(
+		factory = remember {
+			val repository = HomeRepository(
+				api = BackendClient.create(context),
+				dao = recipeDB.recipeDao()
+			)
+			HomeViewModelFactory(repository)
 		}
-	})
+	)
 
 	val drawerState = rememberDrawerState(DrawerValue.Closed)
 	val scope = rememberCoroutineScope()

@@ -17,18 +17,22 @@ abstract class RecipeDB : RoomDatabase() {
 		@Volatile
 		private var INSTANCE: RecipeDB? = null
 
-		fun getDatabase(context: Context): RecipeDB {
+		fun getDatabase(context: Context, userId: String): RecipeDB {
 			return INSTANCE ?: synchronized(this) {
 				val instance = Room.databaseBuilder(
 					context.applicationContext,
 					RecipeDB::class.java,
-					"cookat_db"
+					"cookat_db_$userId" // UNIQUE PER USER
 				)
 					.fallbackToDestructiveMigration(true)
 					.build()
 				INSTANCE = instance
 				instance
 			}
+		}
+
+		fun resetInstance() {
+			INSTANCE = null
 		}
 	}
 }

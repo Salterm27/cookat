@@ -45,6 +45,7 @@ fun RegisterScreen(
 ) {
 	val context = LocalContext.current
 
+
 	val viewModel: RegisterViewModel = viewModel {
 		val sessionManager = SessionManager(context)
 		RegisterViewModel(

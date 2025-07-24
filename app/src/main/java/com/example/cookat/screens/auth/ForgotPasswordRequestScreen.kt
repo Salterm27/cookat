@@ -29,7 +29,7 @@ fun ForgotPasswordRequestScreen(
 		factory = object : ViewModelProvider.Factory {
 			override fun <T : ViewModel> create(modelClass: Class<T>): T {
 				val sessionManager = SessionManager(context)
-				val repo = AuthRepository(sessionManager, context)
+				val repo = AuthRepository(sessionManager, context) // ✅ removed recipeDB
 				@Suppress("UNCHECKED_CAST")
 				return ForgotPasswordViewModel(repo) as T
 			}

@@ -89,10 +89,15 @@ class RecipeEditorViewModel : ViewModel() {
 		onResult: (Boolean, String?) -> Unit
 	) {
 		val dto = uiState.value.toRecipeSentDto(type = "Salado", state = state)
-		val repo = RecipeRepository(context.applicationContext)
+
 		viewModelScope.launch {
 			try {
+				val sessionManager = com.example.cookat.data.local.session.SessionManager(context)
+				val userId = sessionManager.getUserId() ?: "default" // fallback if needed
+
+				val repo = RecipeRepository(context.applicationContext, userId)
 				repo.submitRecipe(dto)
+
 				onResult(true, null)
 			} catch (e: Exception) {
 				onResult(false, e.message)

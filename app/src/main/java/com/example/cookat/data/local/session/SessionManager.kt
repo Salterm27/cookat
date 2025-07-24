@@ -10,6 +10,7 @@ import org.json.JSONObject
 import android.util.Base64
 import io.github.jan.supabase.auth.auth
 
+// Declare DataStore extension
 private val Context.dataStore by preferencesDataStore(name = "user_session")
 
 class SessionManager(private val context: Context) {
@@ -17,9 +18,14 @@ class SessionManager(private val context: Context) {
 	companion object {
 		val ACCESS_TOKEN = stringPreferencesKey("access_token")
 		val REFRESH_TOKEN = stringPreferencesKey("refresh_token")
+		val USER_ID = stringPreferencesKey("user_id")
 	}
 
 	private var cachedToken: String? = null
+
+	// ===============================
+	// Token Management
+	// ===============================
 
 	suspend fun loadToken() {
 		cachedToken = context.dataStore.data.first()[ACCESS_TOKEN]
@@ -56,6 +62,7 @@ class SessionManager(private val context: Context) {
 		context.dataStore.edit { prefs ->
 			prefs.remove(ACCESS_TOKEN)
 			prefs.remove(REFRESH_TOKEN)
+			prefs.remove(USER_ID)
 		}
 	}
 
@@ -104,5 +111,20 @@ class SessionManager(private val context: Context) {
 			val refreshed = refreshAccessToken(supabase)
 			if (refreshed) getAccessToken() else null
 		}
+	}
+
+	// ===============================
+	// User ID Storage
+	// ===============================
+
+	suspend fun saveUserId(userId: String) {
+		context.dataStore.edit { prefs ->
+			prefs[USER_ID] = userId
+		}
+	}
+
+	suspend fun getUserId(): String? {
+		val prefs = context.dataStore.data.first()
+		return prefs[USER_ID]
 	}
 }

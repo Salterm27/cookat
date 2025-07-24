@@ -1,19 +1,20 @@
 package com.example.cookat.repository
 
 import android.content.Context
+import com.example.cookat.data.local.db.RecipeDAO
 import com.example.cookat.data.local.db.RecipeDB
 import com.example.cookat.data.local.mapper.toEntity
 import com.example.cookat.data.local.mapper.toModel
 import com.example.cookat.models.dbModels.recipes.RecipeModel
 import com.example.cookat.network.BackendClient
+import com.example.cookat.network.BackendEndpoints
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class HomeRepository(context: Context) {
-
-	private val api = BackendClient.create(context)
-	private val dao = RecipeDB.getDatabase(context).recipeDao()
-
+class HomeRepository(
+	private val api: BackendEndpoints,
+	private val dao: RecipeDAO
+) {
 	fun observeRecipes(): Flow<List<RecipeModel>> {
 		return dao.observeRecipes().map { entities ->
 			entities.map { it.toModel() }

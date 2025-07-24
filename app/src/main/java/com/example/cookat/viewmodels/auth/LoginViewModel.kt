@@ -24,21 +24,21 @@ class LoginViewModel(
 		uiState = uiState.copy(password = newPassword)
 	}
 
-	fun login(onSuccess: () -> Unit) {
+	fun login(onSuccess: (String) -> Unit) {
 		viewModelScope.launch {
 			uiState = uiState.copy(isLoading = true, errorMessage = null)
 
 			val result = authRepository.login(uiState.email.trim(), uiState.password)
 
 			if (result.isSuccess) {
+				val userId = result.getOrNull()!!
 				uiState = uiState.copy(isLoading = false)
-				onSuccess()
+				onSuccess(userId)
 			} else {
 				val rawError = result.exceptionOrNull()?.message ?: ""
 				val friendlyMessage = when {
-					rawError.contains("invalid_credentials", ignoreCase = true) ->
+					rawError.contains("invalid", ignoreCase = true) ->
 						"El email o la contraseña son incorrectos."
-
 					else -> "Ocurrió un error inesperado. Intenta de nuevo."
 				}
 

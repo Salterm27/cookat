@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.cookat.models.uiStates.HomeUiState
 import com.example.cookat.models.uiStates.RecipeFilter
@@ -13,8 +14,10 @@ import com.example.cookat.repository.HomeRepository
 import kotlinx.coroutines.launch
 import java.util.Locale.getDefault
 
-class HomeViewModel(context: Context) : ViewModel() {
-	private val repository = HomeRepository(context)
+class HomeViewModel(
+	private val repository: HomeRepository
+) : ViewModel() {
+
 	var uiState by mutableStateOf(HomeUiState())
 		private set
 	private var currentPage = 1
@@ -179,4 +182,17 @@ class HomeViewModel(context: Context) : ViewModel() {
 	}
 
 
+}
+
+
+class HomeViewModelFactory(
+	private val repository: HomeRepository
+) : ViewModelProvider.Factory {
+	override fun <T : ViewModel> create(modelClass: Class<T>): T {
+		if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
+			@Suppress("UNCHECKED_CAST")
+			return HomeViewModel(repository) as T
+		}
+		throw IllegalArgumentException("Unknown ViewModel class")
+	}
 }

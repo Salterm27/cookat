@@ -1,6 +1,8 @@
 package com.example.cookat.repository
 
 import android.content.Context
+import com.example.cookat.data.local.db.RecipeDB
+import com.example.cookat.data.local.session.LocalDataCleaner
 import com.example.cookat.data.local.session.SessionManager
 import com.example.cookat.data.remote.SupabaseClient
 import com.example.cookat.models.dbModels.users.UserModel
@@ -62,7 +64,7 @@ class AuthRepository(
 
 
 	// Login with Supabase & save token to DataStore
-	suspend fun login(email: String, password: String): Result<Unit> {
+	suspend fun login(email: String, password: String): Result<String> {
 		return try {
 			auth.signInWith(Email) {
 				this.email = email
@@ -70,12 +72,14 @@ class AuthRepository(
 			}
 
 			val accessToken = auth.currentSessionOrNull()?.accessToken
-			if (accessToken != null) {
-				sessionManager.saveAccessToken(accessToken)
-				println("Bearer token saved: $accessToken")
-			}
+			val userId = auth.currentUserOrNull()?.id
 
-			Result.success(Unit)
+			if (accessToken != null && userId != null) {
+				sessionManager.saveAccessToken(accessToken)
+				Result.success(userId) // return userId
+			} else {
+				Result.failure(Exception("Could not retrieve user ID or token"))
+			}
 
 		} catch (e: BadRequestRestException) {
 			Result.failure(Exception("Invalid email or password"))
@@ -126,7 +130,13 @@ class AuthRepository(
 
 	suspend fun logout() {
 		auth.signOut()
-		sessionManager.clearAccessToken()
+		val userId = getUserId()
+		if (userId != null) {
+			context.deleteDatabase("cookat_db_$userId")
+		}
+		RecipeDB.resetInstance()
+		sessionManager.clearTokens()
+		sessionManager.saveUserId("") // Optional: clean user ID
 	}
 
 	//

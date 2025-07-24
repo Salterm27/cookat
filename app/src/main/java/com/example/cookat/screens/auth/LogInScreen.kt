@@ -37,7 +37,7 @@ import com.example.cookat.viewmodels.auth.LoginViewModel
 fun LogInScreen(
 	viewModel: LoginViewModel,
 	onNavigateToRegister: () -> Unit,
-	onLoginSuccess: () -> Unit,
+	onLoginSuccess: (String) -> Unit,
 	onNavigateToPassword: () -> Unit
 ) {
 	val state = viewModel.uiState
@@ -132,7 +132,11 @@ fun LogInScreen(
 		Spacer(Modifier.height(32.dp))
 
 		Button(
-			onClick = { viewModel.login(onLoginSuccess) },
+			onClick = {
+				viewModel.login { userId ->
+					onLoginSuccess(userId) // ← pass userId to next step (e.g. build DB, navigate)
+				}
+			},
 			shape = RoundedCornerShape(50),
 			modifier = Modifier.align(Alignment.End),
 			colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
