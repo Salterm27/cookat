@@ -10,7 +10,7 @@ import com.example.cookat.data.local.entities.RecipeEntity
 interface RecipeDAO {
 
 	// with live updates: HomeScreen stays in sync automatically.
-	@Query("SELECT * FROM recipes")
+	@Query("SELECT * FROM recipes ORDER BY createdAt DESC")
 	fun observeRecipes(): kotlinx.coroutines.flow.Flow<List<RecipeEntity>>
 
 	// for one-time blocking calls, e.g., for syncing favourites.

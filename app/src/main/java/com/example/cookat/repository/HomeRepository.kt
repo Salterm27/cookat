@@ -21,11 +21,18 @@ class HomeRepository(context: Context) {
 	}
 
 	suspend fun refreshRecipesFromBackend() {
+		val currentFavourites = dao.getRecipes().filter { it.isFavourite }.associateBy { it.id }
+
 		val response = api.getRecipes(page = 1)
-		val remoteRecipes = response.results
+		val remoteRecipes = response.results.map { it.toEntity() }
+
+		// Restore favourites manually
+		val recipesWithFavourites = remoteRecipes.map { recipe ->
+			recipe.copy(isFavourite = currentFavourites[recipe.id]?.isFavourite ?: recipe.isFavourite)
+		}
+
 		dao.clearRecipes()
-		dao.insertAll(remoteRecipes.map { it.toEntity() })
-		syncFavourites()
+		dao.insertAll(recipesWithFavourites)
 	}
 
 	suspend fun fetchRecipesPage(page: Int) {
