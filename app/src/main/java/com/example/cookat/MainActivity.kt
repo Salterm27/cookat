@@ -136,7 +136,6 @@ fun AppNavigation() {
 
 		composable("home") {
 			val context = LocalContext.current
-			val navControllerRemembered = rememberNavController()
 			val sessionManager = remember { SessionManager(context) }
 
 			val userIdState = remember { mutableStateOf<String?>(null) }
@@ -149,11 +148,10 @@ fun AppNavigation() {
 			val userId = userIdState.value
 
 			if (userId != null) {
-				val userDb = com.example.cookat.data.local.db.RecipeDB.getDatabase(context, userId)
-				HomeScreen(navController = navControllerRemembered, recipeDB = userDb)
+				val userDb = RecipeDB.getDatabase(context, userId)
+				HomeScreen(navController = navController, recipeDB = userDb)
 			} else {
-				// Optionally show a loading screen while userId is loading
-				// Or just return, so nothing is rendered yet
+				// Show loading, or just nothing until userId is retrieved
 			}
 		}
 
